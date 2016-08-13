@@ -1,0 +1,22 @@
+{
+  "name": "tamarillo",
+  "version": "1.0.0",
+  "description": "Tamarillo is an easy-to-use ORM for Typescript, it based on Sequelize.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ele828/tamarillo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ele828/tamarillo/issues"
+  },
+  "homepage": "https://github.com/ele828/tamarillo#readme",
+  "dependencies": {
+    "reflect-metadata": "^0.1.8"
+  }
+}
