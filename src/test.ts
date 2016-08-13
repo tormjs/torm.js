@@ -36,9 +36,6 @@ class Person extends Model {
     @Column()
     age: number;
     
-    constructor() {
-        super();
-    }
 }
 
 async function App() {
