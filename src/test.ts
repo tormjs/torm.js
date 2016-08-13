@@ -8,21 +8,30 @@ function Column(typeOrOptions?, options?): Function {
     }
 }
 
+/**
+ * Expose all the sequalize methods and make it compatible
+ * 
+ * @class Sequalize
+ */
 class Sequalize {
-  name: string;
-  static getName() {
-    console.log("Sequalize,", this.name);
-  }
-  static sync() {
+  static sync(args) {
     console.log("function name: ", this.name)
   }
-  static create() {}
+  static create(args) {}
 }
 
-class Greeter extends Sequalize {
+/**
+ * Model class for some pre-defined methods like a bridge
+ * 
+ * @class Model
+ * @extends {Sequalize}
+ */
+class Model extends Sequalize {}
+
+class Person extends Model {
 
     @Column()
-    greeting: string;
+    name: string;
 
     @Column()
     age: number;
@@ -33,13 +42,15 @@ class Greeter extends Sequalize {
 }
 
 async function App() {
-  let greeter = new Greeter();
+  /**
+   * Operation API Test
+   */
+  let person = new Person();
+  person.name = "Eric Wong";
+  person.age = 11;
 
-  Greeter.getName();
-  greeter.age = 11;
-
-  await Greeter.sync();
-  await Greeter.create();
+  await Person.sync({force: true});
+  await Person.create(person);
 }
 
 App();
