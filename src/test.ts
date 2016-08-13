@@ -19,66 +19,13 @@ class Sequalize {
   static create() {}
 }
 
-class Container<T> {
-  private _container: {key: string, handler}[];
-
-  constructor() {
-    this._container = [];
-  }
-
-  add(key: string, item: T) {
-    if (this.find(key))
-      return;
-
-    this._container.push({
-      key: key,
-      handler: item
-    })
-  }
-
-
-  find(key: string): T {
-    let find = this._container.filter(item => {
-      if (item.key === key) {
-        return item.handler;
-      }
-    })
-    if (!find || !find[0]) return null;
-
-    return find[0].handler;
-  }
-}
-
-const tableContainer = new Container<Sequalize>();
-
-class Model extends Sequalize {
-  constructor() {
-      super();
-      // let formatString = getFormat(this, "greeting");
-      // let aaa = getFormat(this, "aaa");
-
-      let table = "greeter";
-      let model = tableContainer.find(table)
-
-      if (!model) {
-        model = new Sequalize();
-        tableContainer.add(table, model)
-      }
-
-      // model.name = aaa;
-
-      return model;
-  }
-  
-}
-
-class Greeter extends Model {
+class Greeter extends Sequalize {
 
     @Column()
     greeting: string;
 
     @Column()
-    aaa: number;
+    age: number;
     
     constructor() {
         super();
@@ -86,16 +33,10 @@ class Greeter extends Model {
 }
 
 async function App() {
-
-  // console.log(greeter.greet())
-
   let greeter = new Greeter();
 
   Greeter.getName();
-
-  greeter.aaa = 11;
-
-  // greeter.testMethod("ppppp");
+  greeter.age = 11;
 
   await Greeter.sync();
   await Greeter.create();
