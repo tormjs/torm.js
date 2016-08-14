@@ -3,19 +3,17 @@ import {entityCollection, Entity, Property} from '../collection';
 
 export function Column(typeOrOptions?, options?): Function {
   return function (object: Object, propertyName: string) {
-    
+
     const entityName = object.constructor.name;
     const propertyType = Reflect.getMetadata("design:type", object, propertyName).name;
 
     let type: ColumnTypes = getPropertyType(propertyType);
-    let entityExist: boolean = entityCollection.has(entityName)? true: false;
-
     let metadata: Property = {
         propertyName: propertyName,
         propertyType: type
     };
 
-    if (entityExist) {
+    if (entityCollection.has(entityName)) {
       let entity = entityCollection.find(entityName) as Entity<Property>;
       entity.insert(metadata);
     }
