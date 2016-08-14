@@ -1,33 +1,7 @@
 import "reflect-metadata";
 
-function Column(typeOrOptions?, options?): Function {
-    return function (object: Object, propertyName: string) {
-      console.log(object.constructor.name)
-      // console.log(object, propertyName)
-      const reflectedType = Reflect.getMetadata("design:type", object, propertyName);
-      console.log(reflectedType);
-    }
-}
-
-/**
- * Expose all the sequalize methods and make it compatible
- * 
- * @class Sequalize
- */
-class Sequalize {
-  static sync(args) {
-    console.log("function name: ", this.name)
-  }
-  static create(args) {}
-}
-
-/**
- * Model class for some pre-defined methods like a bridge
- * 
- * @class Model
- * @extends {Sequalize}
- */
-class Model extends Sequalize {}
+import Model from './Model';
+import { Column } from './decorator'
 
 class Person extends Model {
 
