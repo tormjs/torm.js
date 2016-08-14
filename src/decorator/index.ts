@@ -1,1 +1,2 @@
-export {Column} from './Column';
+export * from './Column';
+export * from './Entity';
