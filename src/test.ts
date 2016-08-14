@@ -1,7 +1,8 @@
 import "reflect-metadata";
 
 import Model from './Model';
-import { Column } from './decorator'
+import {Column} from './decorator';
+import {entityCollection, Entity, Property} from './collection';
 
 class Person extends Model {
 
@@ -13,19 +14,7 @@ class Person extends Model {
 
     @Column()
     friends: number[]
-    
+
 }
 
-async function App() {
-  /**
-   * Operation API Test
-   */
-  let person = new Person();
-  person.name = "Eric Wong";
-  person.age = 11;
-
-  await Person.sync({force: true});
-  await Person.create(person);
-}
-
-App();
+console.log(entityCollection);
