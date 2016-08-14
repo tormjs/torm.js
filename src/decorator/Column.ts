@@ -32,5 +32,8 @@ function getPropertyType(propertyType: string): ColumnTypes {
   if (type === 'string') {
     return ColumnTypes.STRING;
   }
+  else if (type === 'number') {
+    return ColumnTypes.NUMBER;
+  }
   return ColumnTypes.SIMPLE_ARRAY;
 }

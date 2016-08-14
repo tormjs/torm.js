@@ -17,4 +17,4 @@ class Person extends Model {
 
 }
 
-console.log(entityCollection);
+console.log(entityCollection.find('Person'));
