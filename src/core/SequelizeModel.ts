@@ -21,7 +21,7 @@ export class Model {
    * @param {any} args
    * @returns
    */
-  static sync(...args) {
+  static sync(...args): Promise<Model> {
     let objectName = this.name.toLowerCase();
     let model: any = sequelizeSchemaPool.poll(objectName);
     return model.sync(...args);
@@ -34,7 +34,7 @@ export class Model {
    * @param {Object} object
    * @returns
    */
-  static create(object: Object) {
+  static create(object: Object): Promise<Model> {
     let objectName = this.name.toLowerCase();
     let model: any = sequelizeSchemaPool.poll(objectName);
     return model.create(object);
@@ -46,7 +46,7 @@ export class Model {
    * @static
    * @returns
    */
-  static findAll() {
+  static findAll(): Promise<Model[]> {
     let objectName = this.name.toLowerCase();
     let model: any = sequelizeSchemaPool.poll(objectName);
     return model.findAll();

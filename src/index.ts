@@ -49,7 +49,10 @@ async function Test() {
     person.age = 25;
     person.friends = 'Vincent';
 
+    // person.sync();
+
     let p = await Person.findAll();
+
     p.forEach( (person: Person) => {
         console.log(person.id, person.name, person.age, person.friends, person.createdAt, person.updatedAt);
     });
