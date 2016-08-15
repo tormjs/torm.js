@@ -8,7 +8,7 @@
  * @extends {Map<string, T>}
  * @template T
  */
-class SequelizeSchemaPool<T> extends Map<string, T> {
+class SequelizeModelPool<T> extends Map<string, T> {
 
   /**
    * Put entity into map 
@@ -33,4 +33,4 @@ class SequelizeSchemaPool<T> extends Map<string, T> {
   }
 }
 
-export const sequelizeSchemaPool = new SequelizeSchemaPool();
+export const sequelizeSchemaPool = new SequelizeModelPool();
