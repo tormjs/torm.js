@@ -40,8 +40,6 @@ class Man extends Model {
 
 }
 
-new Person('Name');
-
 // Person.sync();
 // Man.sync();
 
