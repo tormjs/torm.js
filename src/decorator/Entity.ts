@@ -8,7 +8,7 @@ import {EntityCombinator, sequelizeSchemaPool} from '../core';
  * @param {*} target
  */
 export function Entity(target: Function) {
-  let entityName: string = (target.name as string).toLowerCase();
+  let entityName: string = target.name.toLowerCase();
   let entity = EntityCombinator.compose(entityName);
   sequelizeSchemaPool.put(entity.name, entity);
 }
