@@ -52,9 +52,8 @@ async function Test() {
     // person.sync();
 
     Tamarillo.create(person);
-    let p = await Tamarillo.findAll(Person.prototype);
 
-    
+    let p = await Tamarillo.findAll(Person.prototype);
 
     p.forEach(person => {
         console.log(person.age, person.name, person.friends);

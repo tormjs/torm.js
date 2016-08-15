@@ -41,7 +41,7 @@ export class Tamarillo {
    * @param {any} args
    * @returns
    */
-  static sync(object: Object, ...args): Promise<Model> {
+  static sync<E extends Model>(object: E, ...args): Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
     let model: any = sequelizeSchemaPool.poll(objectName);
     return model.sync(...args);
@@ -54,7 +54,7 @@ export class Tamarillo {
    * @param {Object} object
    * @returns
    */
-  static create(object: Object): Promise<Model> {
+  static create<E extends Model>(object: E): Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
     let model: any = sequelizeSchemaPool.poll(objectName);
     return model.create(object);
