@@ -1,7 +1,6 @@
 import "reflect-metadata";
 
-import {Tamarillo} from './core';
-import Model from './Model';
+import {Tamarillo, Model} from './core';
 import {Column, Entity} from './decorator';
 import {entityPool, Property} from './entity';
 
@@ -29,7 +28,7 @@ class Person extends Model {
     age: number;
 
     @Column()
-    friends: number[]
+    friends: string
 
 }
 
@@ -37,15 +36,18 @@ class Person extends Model {
 class Man extends Model {
 
     @Column()
-    name: string;
-
-    @Column()
-    age: number;
-
-    @Column()
-    friends: number[]
+    gender: string;
 
 }
 
-Person.sync();
-Man.sync();
+new Person('Name');
+
+// Person.sync();
+// Man.sync();
+
+let person = new Person();
+person.name = 'Eric';
+person.age = 24;
+person.friends = 'Vincent';
+
+// Person.create(person);

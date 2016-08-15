@@ -5,11 +5,17 @@ import {sequelizeEntityPool} from './';
  * @class Sequalize
  */
 export class Sequelize {
+  
   static sync(...args) {
-    let name = this.name.toLowerCase();
-    let model: any = sequelizeEntityPool.poll(name);
-    model.sync(...args);
+    let objectName = this.name.toLowerCase();
+    let model: any = sequelizeEntityPool.poll(objectName);
+    return model.sync(...args);
   }
 
-  static create(args) {}
+  static create(object: Object) {
+    let objectName = this.name.toLowerCase();
+    let model: any = sequelizeEntityPool.poll(objectName);
+    return model.create(object);
+  }
+
 }

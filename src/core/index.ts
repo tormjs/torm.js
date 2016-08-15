@@ -1,3 +1,4 @@
+export * from './Model';
 export * from './Tamarillo';
 export * from './Sequelize';
 export * from './SequelizeDriver';
