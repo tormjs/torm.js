@@ -1,6 +1,14 @@
 import {TypeResolver} from '../type'
 import {entityPool, Entity, Property} from '../entity'; 
 
+/**
+ * Decorator for @Column, represented for a Column of a Table
+ * 
+ * @export
+ * @param {any} [typeOrOptions]
+ * @param {any} [options]
+ * @returns {Function}
+ */
 export function Column(typeOrOptions?, options?): Function {
   return function (object: Object, propertyName: string) {
 

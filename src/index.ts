@@ -43,9 +43,16 @@ class Man extends Model {
 // Person.sync();
 // Man.sync();
 
-let person = new Person();
-person.name = 'Eric';
-person.age = 24;
-person.friends = 'Vincent';
+async function Test() {
+    let person = new Person();
+    person.name = 'Eric';
+    person.age = 25;
+    person.friends = 'Vincent';
 
-// Person.create(person);
+    let p = await Person.findAll();
+    p.forEach( (person: Person) => {
+        console.log(person.id, person.name, person.age, person.friends, person.createdAt, person.updatedAt);
+    });
+}
+
+Test();

@@ -16,6 +16,14 @@ class EmptyPropertyError extends Error {
  * @class EntityCombinator
  */
 export class EntityCombinator {
+  
+  /**
+   * Compose entity metadata into Sequence Entity
+   * 
+   * @static
+   * @param {string} entityName
+   * @returns
+   */
   static compose(entityName: string) {
     let entity = entityPool.poll(entityName) as Entity<Property>;
 
