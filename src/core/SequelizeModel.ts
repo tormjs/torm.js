@@ -1,4 +1,3 @@
-import {sequelizeSchemaPool} from './';
 import {SequelizeDriver} from './SequelizeDriver';
 
 /**
@@ -13,43 +12,5 @@ export class Model {
   id: number;
   createdAt: Date;
   updatedAt: Date;
-
-  /**
-   * Table schema Synchronous
-   * 
-   * @static
-   * @param {any} args
-   * @returns
-   */
-  static sync(...args): Promise<Model> {
-    let objectName = this.name.toLowerCase();
-    let model: any = sequelizeSchemaPool.poll(objectName);
-    return model.sync(...args);
-  }
-
-  /**
-   * Create a record in specific table
-   * 
-   * @static
-   * @param {Object} object
-   * @returns
-   */
-  static create(object: Object): Promise<Model> {
-    let objectName = this.name.toLowerCase();
-    let model: any = sequelizeSchemaPool.poll(objectName);
-    return model.create(object);
-  }
-
-  /**
-   * Find all records in specific table
-   * 
-   * @static
-   * @returns
-   */
-  static findAll(): Promise<Model[]> {
-    let objectName = this.name.toLowerCase();
-    let model: any = sequelizeSchemaPool.poll(objectName);
-    return model.findAll();
-  }
 
 }

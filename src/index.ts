@@ -46,16 +46,20 @@ class Man extends Model {
 async function Test() {
     let person = new Person();
     person.name = 'Eric';
-    person.age = 25;
+    person.age = 1;
     person.friends = 'Vincent';
 
     // person.sync();
 
-    let p = await Person.findAll();
+    Tamarillo.create(person);
+    let p = await Tamarillo.findAll(Person.prototype);
 
-    p.forEach( (person: Person) => {
-        console.log(person.id, person.name, person.age, person.friends, person.createdAt, person.updatedAt);
+    
+
+    p.forEach(person => {
+        console.log(person.age, person.name, person.friends);
     });
+
 }
 
 Test();
