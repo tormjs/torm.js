@@ -15,9 +15,9 @@ export class EntityNotFoundError extends Error {
 /**
  * Stores table metadata
  */
-class EntityCollection<T extends {entityName: string}> extends Map<string, T> {
+class EntityPool<T extends {entityName: string}> extends Map<string, T> {
 
-  insert(entity: T): void {
+  put(entity: T): void {
     // find if there exists
     if (this._hasProperty(entity))
       throw new EntityAlreadyExistError(entity.entityName);
@@ -25,7 +25,7 @@ class EntityCollection<T extends {entityName: string}> extends Map<string, T> {
     this.set(entity.entityName, entity);
   }
 
-  find(entityName: string): T {
+  poll(entityName: string): T {
     const entity = this.get(entityName);
     if (!entity) {
       throw new EntityNotFoundError(entityName);
@@ -41,4 +41,4 @@ class EntityCollection<T extends {entityName: string}> extends Map<string, T> {
 /**
  * Singleton pattern
  */
-export let entityCollection = new EntityCollection();
+export const entityPool = new EntityPool();

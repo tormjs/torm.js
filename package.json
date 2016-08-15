@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/ele828/tamarillo#readme",
   "dependencies": {
-    "reflect-metadata": "^0.1.8"
+    "@types/node": "^6.0.33",
+    "mysql": "^2.11.1",
+    "reflect-metadata": "^0.1.8",
+    "sequelize": "^3.24.0"
   }
 }

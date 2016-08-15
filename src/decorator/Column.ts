@@ -1,39 +1,30 @@
-import {ColumnTypes} from '../type';
-import {entityCollection, Entity, Property} from '../collection'; 
+import {TypeResolver} from '../type'
+import {entityPool, Entity, Property} from '../entity'; 
 
 export function Column(typeOrOptions?, options?): Function {
   return function (object: Object, propertyName: string) {
 
-    const entityName = object.constructor.name;
-    const propertyType = Reflect.getMetadata("design:type", object, propertyName).name;
+    const entityName = object.constructor.name.toLowerCase();
+    const propertyType = (Reflect.getMetadata("design:type", object, propertyName)
+                            .name as string).toLowerCase();
 
-    let type: ColumnTypes = getPropertyType(propertyType);
+    let type = TypeResolver.resolve(propertyType);
+
     let metadata: Property = {
         propertyName: propertyName,
         propertyType: type
     };
 
-    if (entityCollection.has(entityName)) {
-      let entity = entityCollection.find(entityName) as Entity<Property>;
+    if (entityPool.has(entityName)) {
+      let entity = entityPool.poll(entityName) as Entity<Property>;
       entity.insert(metadata);
     }
     else {
       let entity = new Entity(entityName);
       entity.insert(metadata);
       // insert to entityCollection
-      entityCollection.insert(entity);
+      entityPool.put(entity);
     }
 
   }
-}
-
-function getPropertyType(propertyType: string): ColumnTypes {
-  let type = propertyType.toLowerCase();
-  if (type === 'string') {
-    return ColumnTypes.STRING;
-  }
-  else if (type === 'number') {
-    return ColumnTypes.NUMBER;
-  }
-  return ColumnTypes.SIMPLE_ARRAY;
 }

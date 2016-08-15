@@ -4,6 +4,6 @@
  * @class Model
  * @extends {Sequalize}
  */
-import Sequalize from './Sequalize';
+import {Sequelize} from './core';
 
-export default class Model extends Sequalize {}
+export default class Model extends Sequelize {}

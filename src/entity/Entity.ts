@@ -1,5 +1,3 @@
-import {ColumnTypes} from '../type/ColumnTypes.ts';
-
 export class PropertyAlreadyExistError extends Error {
   constructor(propsName: string) {
     super(`Property ${propsName} is already exist in current entity`)
@@ -12,7 +10,7 @@ export class PropertyNotFoundError extends Error {
   }
 }
 
-export type Property = { propertyName: string, propertyType: ColumnTypes }
+export type Property = { propertyName: string, propertyType: any }
 
 /**
  * Stores column metadata
@@ -24,11 +22,15 @@ export type Property = { propertyName: string, propertyType: ColumnTypes }
  */
 export class Entity<T extends Property> {
   public entityName: string;
-  private metadata: Array<T>;
+  private _metadata: Array<T>;
 
   constructor(entityName: string) {
     this.entityName = entityName;
-    this.metadata = [];
+    this._metadata = [];
+  }
+
+  get metadata() {
+    return this._metadata
   }
 
   insert(column: T): void {
@@ -36,17 +38,17 @@ export class Entity<T extends Property> {
     if (this._hasProperty(column))
       throw new PropertyAlreadyExistError(column.propertyName);
 
-    this.metadata.push(column);
+    this._metadata.push(column);
   }
 
   find(propName: string): T {
-    const property = this.metadata.find(property => property.propertyName === propName);
+    const property = this._metadata.find(property => property.propertyName === propName);
     if (!property)
       throw new PropertyNotFoundError(propName);
     return property;
   }
 
   private _hasProperty(column: T): boolean {
-    return !!this.metadata.find(prop => prop.propertyName === column.propertyName);
+    return !!this._metadata.find(prop => prop.propertyName === column.propertyName);
   }
 }
