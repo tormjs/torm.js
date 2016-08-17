@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import {Tamarillo, Model} from './core';
+import {Tamarillo, Model, Result} from './core';
 import {Column, Entity} from './decorator';
 import {entityPool, Property} from './entity';
 
@@ -53,7 +53,7 @@ async function Test() {
 
     Tamarillo.create(person);
 
-    let persons: Result<Person> = await Tamarillo.findAll(Person.prototype);
+    // let persons: Result<Person> = await Tamarillo.findAll(Person.prototype);
 
     p.forEach(person => {
         console.log(person.age, person.name, person.friends);
