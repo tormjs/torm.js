@@ -1,4 +1,6 @@
 import {SequelizeDriver,sequelizeModelPool,Model} from './';
+import { Result } from './Result';
+import { Query } from './Query';
 
 /**
  * Tarmarillo core
@@ -67,10 +69,8 @@ export class Tamarillo {
    * @static
    * @returns
    */
-  static where<E extends Model>(clazz: E): E[] {
-    let entityName = clazz.constructor.name.toLowerCase();
-    let model: any = sequelizeModelPool.poll(entityName);
-    return model.findAll();
+  static where<E extends Model>(clazz: E): Query<E> {
+    return new Result().where(clazz);
   }
 
 }

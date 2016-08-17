@@ -1,9 +1,16 @@
 import { Model } from './SequelizeModel';
+import { Query } from './Query';
 
 /**
  * Query result
  * 
+ * @export
  * @class Result
+ * @extends {Array<E>}
  * @template E
  */
-export class Result<E extends Model> {}
+export class Result<E extends Model> extends Array<E> {
+  public where<E extends Model>(clazz: E): Query<E>{
+    return new Query(clazz);
+  }
+}

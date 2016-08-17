@@ -32,17 +32,6 @@ class Person extends Model {
 
 }
 
-@Entity
-class Man extends Model {
-
-    @Column()
-    gender: string;
-
-}
-
-// Person.sync();
-// Man.sync();
-
 async function Test() {
     let person = new Person();
     person.name = 'Eric';
@@ -53,9 +42,12 @@ async function Test() {
 
     Tamarillo.create(person);
 
-    // let persons: Result<Person> = await Tamarillo.findAll(Person.prototype);
+    let persons = await Tamarillo
+        .where(Person.prototype)
+        .findAll();
+        
 
-    p.forEach(person => {
+    persons.forEach(person => {
         console.log(person.age, person.name, person.friends);
     });
 
