@@ -1,5 +1,6 @@
 import { Model } from './SequelizeModel';
 import { Result } from './Result';
+import { SequelizeDriver } from './SequelizeDriver';
 
 /**
  * Designed API for query operations 
@@ -83,10 +84,21 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @private
    * @type {Array<any>}
    */
-  private _where: Array<any>;
+  private _conditions: Array<any>;
+
+  /**
+   * Sequelize excludes collections
+   * 
+   * @private
+   * @type {Array<any>}
+   */
+  private _excludes: Array<any>;
 
   constructor(clazz: E) {
     this._clazz = clazz;
+    this._attributes = [];
+    this._conditions = [];
+    this._excludes = [];
   }
 
   /**
@@ -98,7 +110,17 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @returns {Query<E>}
    */
   public count(name: string, alias?: string): Query<E> {
-    throw 'Not Implemented';
+    if (!name) return this;
+
+    let sequelize = SequelizeDriver.sequelize;
+    // push condition into attributes array
+    if (alias) {
+      this._attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
+    }
+    else {
+      this._attributes.push([sequelize.fn('COUNT', sequelize.col(name))]);
+    }
+    return this;
   }
 
    /**
@@ -108,7 +130,11 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @returns {Query<E>}
    */
   public cond(conditions: {}): Query<E> {
-    throw 'Not Implemented';
+    if (!conditions) return this;
+
+    let sequelize = SequelizeDriver.sequelize;
+    this._conditions.push(conditions);
+    return this;
   }
 
   /**
@@ -117,7 +143,11 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @returns {Query<E>}
    */
   public not(name: string): Query<E> {
-    throw 'Not Implemented';
+    if (!name) return this;
+
+    let sequelize = SequelizeDriver.sequelize;
+    this._excludes.push(name);
+    return this;
   }
 
   /**
@@ -129,7 +159,15 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @returns {Query<E>}
    */
   public column(name: string, alias?: string): Query<E> {
-    throw 'Not Implemented';
+    if (!name) return this;
+
+    let sequelize = SequelizeDriver.sequelize;
+    if (!alias)
+      this._attributes.push(name)
+    else {
+      this._attributes.push([name, alias]);
+    }
+    return this;
   }
 
   /**
