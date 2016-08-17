@@ -33,4 +33,4 @@ class SequelizeModelPool<T> extends Map<string, T> {
   }
 }
 
-export const sequelizeSchemaPool = new SequelizeModelPool();
+export const sequelizeModelPool = new SequelizeModelPool();

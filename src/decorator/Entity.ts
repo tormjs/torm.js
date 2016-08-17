@@ -1,4 +1,4 @@
-import {EntityCombinator, sequelizeSchemaPool} from '../core';
+import {EntityCombinator, sequelizeModelPool} from '../core';
 /**
  * Decorator for @Entity
  * here we compose all the metadata into SequelizeEntityPool.
@@ -10,5 +10,5 @@ import {EntityCombinator, sequelizeSchemaPool} from '../core';
 export function Entity(target: Function) {
   let entityName: string = target.name.toLowerCase();
   let entity = EntityCombinator.compose(entityName);
-  sequelizeSchemaPool.put(entity.name, entity);
+  sequelizeModelPool.put(entity.name, entity);
 }

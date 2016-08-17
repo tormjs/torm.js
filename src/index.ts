@@ -53,7 +53,7 @@ async function Test() {
 
     Tamarillo.create(person);
 
-    let p = await Tamarillo.findAll(Person.prototype);
+    let persons: Result<Person> = await Tamarillo.findAll(Person.prototype);
 
     p.forEach(person => {
         console.log(person.age, person.name, person.friends);

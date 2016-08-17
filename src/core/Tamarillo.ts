@@ -1,4 +1,4 @@
-import {SequelizeDriver,sequelizeSchemaPool,Model} from './';
+import {SequelizeDriver,sequelizeModelPool,Model} from './';
 
 /**
  * Tarmarillo core
@@ -43,7 +43,7 @@ export class Tamarillo {
    */
   static sync<E extends Model>(object: E, ...args): Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
-    let model: any = sequelizeSchemaPool.poll(objectName);
+    let model: any = sequelizeModelPool.poll(objectName);
     return model.sync(...args);
   }
 
@@ -56,19 +56,20 @@ export class Tamarillo {
    */
   static create<E extends Model>(object: E): Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
-    let model: any = sequelizeSchemaPool.poll(objectName);
+    let model: any = sequelizeModelPool.poll(objectName);
     return model.create(object);
   }
 
   /**
-   * Find all records in specific table
+   * Construct a QueryInterface
+   * TODO: modify all query API
    * 
    * @static
    * @returns
    */
-  static findAll<E extends Model>(clazz: E): E[] {
+  static where<E extends Model>(clazz: E): E[] {
     let entityName = clazz.constructor.name.toLowerCase();
-    let model: any = sequelizeSchemaPool.poll(entityName);
+    let model: any = sequelizeModelPool.poll(entityName);
     return model.findAll();
   }
 
