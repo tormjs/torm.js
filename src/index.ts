@@ -38,18 +38,24 @@ async function Test() {
     person.age = 1;
     person.friends = 'Vincent';
 
-    // person.sync();
-
-    Tamarillo.create(person);
+    // Tamarillo.create(person);
 
     let persons = await Tamarillo
-        .where(Person.prototype)
-        .findAll();
-        
+        .query(Person.prototype)
+        .findAll() as any;
 
-    persons.forEach(person => {
-        console.log(person.age, person.name, person.friends);
-    });
+    
+        
+    // let person2 = await Tamarillo
+    //     .query(Person.prototype)
+    //     .count('age')
+    //     .findAll();
+
+    // persons.forEach(person => {
+    //     console.log(person.age, person.name, person.friends. person.cnt);
+    // });
+
+    // console.log(persons.cnt);
 
 }
 

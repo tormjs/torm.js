@@ -1,6 +1,13 @@
 import { Model } from './SequelizeModel';
 import { Result } from './Result';
 import { SequelizeDriver } from './SequelizeDriver';
+import { sequelizeModelPool } from './SequelizeModelPool';
+
+class ClassNotFoundError extends Error {
+  constructor(msg: string) {
+    super(msg);
+  }
+}
 
 /**
  * Designed API for query operations 
@@ -39,7 +46,7 @@ interface QueryApi<E extends Model> {
    * @param {{}} conditions
    * @returns {Query<E>}
    */
-  cond(conditions: {}): Query<E> 
+  where(conditions: {}): Query<E> 
 
   /**
    * Count number in specify conditions
@@ -84,7 +91,7 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @private
    * @type {Array<any>}
    */
-  private _conditions: Array<any>;
+  private _whereConditions: Array<Object>;
 
   /**
    * Sequelize excludes collections
@@ -97,7 +104,7 @@ export class Query<E extends Model> implements QueryApi<E> {
   constructor(clazz: E) {
     this._clazz = clazz;
     this._attributes = [];
-    this._conditions = [];
+    this._whereConditions = [];
     this._excludes = [];
   }
 
@@ -129,11 +136,10 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @param {{}} conditions
    * @returns {Query<E>}
    */
-  public cond(conditions: {}): Query<E> {
+  public where(conditions: {}): Query<E> {
     if (!conditions) return this;
 
-    let sequelize = SequelizeDriver.sequelize;
-    this._conditions.push(conditions);
+    this._whereConditions.push(conditions);
     return this;
   }
 
@@ -145,7 +151,6 @@ export class Query<E extends Model> implements QueryApi<E> {
   public not(name: string): Query<E> {
     if (!name) return this;
 
-    let sequelize = SequelizeDriver.sequelize;
     this._excludes.push(name);
     return this;
   }
@@ -161,7 +166,6 @@ export class Query<E extends Model> implements QueryApi<E> {
   public column(name: string, alias?: string): Query<E> {
     if (!name) return this;
 
-    let sequelize = SequelizeDriver.sequelize;
     if (!alias)
       this._attributes.push(name)
     else {
@@ -176,7 +180,55 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @returns {Result<E>}
    */
   public findAll(): Result<E> {
-    throw 'Not Implemented';
+    if (!this._clazz)
+      throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
+    
+    // get sequelize model from model pool
+    let modelName = this._clazz.constructor.name.toLowerCase();
+    let model: any = sequelizeModelPool.poll(modelName);
+    console.log(this._buildQueryParams())
+    return <Result<E>>model.findAll(this._buildQueryParams());
+  }
+
+  /**
+   * Build all params into one object
+   * 
+   * @private
+   * @returns {Object}
+   */
+  private _buildQueryParams(): Object {
+    type Attr = { include?: Array<any>, exclude?: Array<any> };
+    type Param = { attributes: Array<Attr | string | Object> };
+
+    let params: Param = { attributes: [] }
+
+    // build where conditions
+    if (this._whereConditions.length > 0) {
+      let conditions = {};
+      this._whereConditions.forEach(cond => {
+        Object.keys(cond).forEach(key => {
+          conditions[key] = cond[key]
+        });
+      });
+      return { where: conditions };
+    }
+
+    // build attributes
+    else if (this._attributes.length > 0 ) {
+      this._attributes.forEach(attr => {
+        params.attributes.push(attr);
+      });
+    }
+
+    // build excludes query
+    else if (this._whereConditions.length > 0) {
+      params.attributes['exclude'] = this._excludes;
+    }
+
+    // no conditions provided
+    else return;
+
+    return params;
   }
 
 }

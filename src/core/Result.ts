@@ -10,7 +10,7 @@ import { Query } from './Query';
  * @template E
  */
 export class Result<E extends Model> extends Array<E> {
-  public where<E extends Model>(clazz: E): Query<E>{
+  public query<E extends Model>(clazz: E): Query<E>{
     return new Query(clazz);
   }
 }

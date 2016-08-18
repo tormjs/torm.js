@@ -69,8 +69,8 @@ export class Tamarillo {
    * @static
    * @returns
    */
-  static where<E extends Model>(clazz: E): Query<E> {
-    return new Result().where(clazz);
+  static query<E extends Model>(clazz: E): Query<E> {
+    return new Result().query(clazz);
   }
 
 }
