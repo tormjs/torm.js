@@ -261,7 +261,8 @@ export class Query<E extends Model> implements QueryApi<E> {
     }
 
     if (this._limit || this._offset) {
-      params = {};
+      if (params.attributes.length <= 0)
+        delete params.attributes;
     }
     if (this._limit) {
       params['limit'] = this._limit;
