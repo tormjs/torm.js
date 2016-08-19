@@ -1,5 +1,5 @@
-# Tamarillo
-Tamarillo is an easy-to-use ORM for Typescript, it's based on Sequelize.
+# Torm
+Torm is an easy-to-use ORM for Typescript, it's based on Sequelize.
 
 ### Note: Still under development, don't use it in production.
 
