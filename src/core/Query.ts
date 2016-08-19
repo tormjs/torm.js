@@ -56,7 +56,7 @@ interface QueryApi<E extends Model> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  count(name: string, alias?: string): number
+  count(name: string, alias?: string): Promise<number>
 
 }
 
@@ -116,23 +116,27 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  public count(name?: string, alias?: string): number {
+  public async count(name?: string, alias?: string): Promise<number> {
     let sequelize = SequelizeDriver.sequelize;
     let modelName = this._clazz.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
     let param = { attributes: [] };
     
     // count *
-    if (!name || name === '') {
-      name = '*'
+    if (!name || name.trim() === '') {
+      name = '*';
     }
-    if (alias) {
-      param.attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
+
+    if (!alias || alias.trim() === '') {
+      alias = '__alias__';
     }
-    else {
-      param.attributes.push([sequelize.fn('COUNT', sequelize.col(name))]);
-    }
-    return model.findAll(param);
+    
+    param.attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
+
+    let retval = await model.findAll(param);
+    if (retval.length <= 0) return;
+
+    return retval[0].dataValues[alias];
   }
 
    /**

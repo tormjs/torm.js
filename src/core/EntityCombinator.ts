@@ -1,6 +1,6 @@
-import {Tamarillo} from './';
-import {entityPool, Entity, Property} from '../entity';
-import {SequelizeDriver} from '../core';
+import { Torm } from './Torm';
+import { entityPool, Entity, Property } from '../entity';
+import { SequelizeDriver } from '../core';
 
 
 class EmptyPropertyError extends Error {
@@ -36,7 +36,7 @@ export class EntityCombinator {
 
     if (!properties) throw new EmptyPropertyError(entity.entityName);
 
-    return Tamarillo.driver.define(entity.entityName, properties);
+    return Torm.driver.define(entity.entityName, properties);
     
   }
 }

@@ -40,13 +40,10 @@ async function Test() {
 
     // Tamarillo.create(person);
 
-    let persons = await Torm.query(Person.prototype)
-        .findAll();
+    // let persons = await Torm.query(Person.prototype).findAll();
 
-    let count = await Torm.query(Person.prototype)
-        .count('age', 'age') as any;
-
-    console.log(count.age);
+    let count = await Torm.query(Person.prototype).count();
+    console.log(count);
     
     // console.log(persons[0].age);
         
