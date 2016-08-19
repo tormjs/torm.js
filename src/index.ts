@@ -49,8 +49,8 @@ async function Test() {
     let count = await Torm.query(Person.prototype).count();
     console.log(count);
 
-    let all = await Torm.query(Person.prototype).limit(2).offset(1).findAll();
-    all.forEach(a => console.log(a.id));
+    let all = await Torm.query(Person.prototype).column('name').limit(2).offset(1).findAll();
+    all.forEach(a => console.log(a.name));
 
     // let person2 = await Tamarillo
     //     .query(Person.prototype)
