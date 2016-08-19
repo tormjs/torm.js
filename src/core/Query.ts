@@ -58,6 +58,29 @@ interface QueryApi<E extends Model> {
    */
   count(name: string, alias?: string): Promise<number>
 
+  /**
+   * Limit record number of each query
+   * 
+   * @param {number} num
+   * @returns {Query<E>}
+   */
+  limit(num: number): Query<E>
+
+  /**
+   * Skip record number
+   * 
+   * @param {number} num
+   * @returns {Query<E>}
+   */
+  offset(num: number): Query<E>
+
+  /**
+   * Todo 
+   * 
+   * @returns {Query<E>}
+   */
+  order(): Query<E>
+
 }
 
 /**
@@ -100,6 +123,9 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @type {Array<any>}
    */
   private _excludes: Array<any>;
+
+  private _limit: number;
+  private _offset: number;
 
   constructor(clazz: E) {
     this._clazz = clazz;
@@ -206,10 +232,10 @@ export class Query<E extends Model> implements QueryApi<E> {
    */
   private _buildQueryParams(): Object {
     type Attr = { include?: Array<any>, exclude?: Array<any> };
-    type Param = { attributes: Array<Attr | string | Object> };
+    type Param = { attributes?: Array<Attr | string | Object> };
 
-    let params: Param = { attributes: [] }
-
+    let params;
+    params = {attributes: []};
     // build where conditions
     if (this._whereConditions.length > 0) {
       let conditions = {};
@@ -233,10 +259,45 @@ export class Query<E extends Model> implements QueryApi<E> {
       params.attributes['exclude'] = this._excludes;
     }
 
-    // no conditions provided
-    else return;
+    if (this._limit || this._offset)
+      params = {};
+
+    if (this._limit) {
+      params['limit'] = this._limit;
+    }
+    if (this._offset) {
+      params['offset'] = this._offset;
+    }
+
+    console.log(params)
 
     return params;
   }
 
+  /**
+   * Limit record number of each query
+   * 
+   * @param {number} num
+   * @returns {Query<E>}
+   */
+  public limit(num: number): Query<E> {
+    if (num) this._limit = num;
+    return this;
+  }
+
+  /**
+   * Skip record number
+   * 
+   * @param {number} num
+   * @returns {Query<E>}
+   */
+  public offset(num: number): Query<E> {
+    if (num) this._offset = num;
+    return this;
+  }
+
+
+  public order(): Query<E> {
+    throw 'Not Implemented';
+  }
 }
