@@ -56,7 +56,7 @@ interface QueryApi<E extends Model> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  count(name: string, alias?: string): Query<E>
+  count(name: string, alias?: string): number
 
 }
 
@@ -116,18 +116,23 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  public count(name: string, alias?: string): Query<E> {
-    if (!name) return this;
-
+  public count(name?: string, alias?: string): number {
     let sequelize = SequelizeDriver.sequelize;
-    // push condition into attributes array
+    let modelName = this._clazz.constructor.name.toLowerCase();
+    let model: any = sequelizeModelPool.poll(modelName);
+    let param = { attributes: [] };
+    
+    // count *
+    if (!name || name === '') {
+      name = '*'
+    }
     if (alias) {
-      this._attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
+      param.attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
     }
     else {
-      this._attributes.push([sequelize.fn('COUNT', sequelize.col(name))]);
+      param.attributes.push([sequelize.fn('COUNT', sequelize.col(name))]);
     }
-    return this;
+    return model.findAll(param);
   }
 
    /**
@@ -186,7 +191,6 @@ export class Query<E extends Model> implements QueryApi<E> {
     // get sequelize model from model pool
     let modelName = this._clazz.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
-    console.log(this._buildQueryParams())
     return <Result<E>>model.findAll(this._buildQueryParams());
   }
 

@@ -3,9 +3,9 @@ import { Result } from './Result';
 import { Query } from './Query';
 
 /**
- * Tarmarillo core
+ * Torm core
  */
-export class Tamarillo {
+export class Torm {
   /**
    * Sequalize sequelize driver instance
    * 

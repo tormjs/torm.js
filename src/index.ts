@@ -1,12 +1,12 @@
 import "reflect-metadata";
 
-import {Tamarillo, Model, Result} from './core';
+import {Torm, Model, Result} from './core';
 import {Column, Entity} from './decorator';
 import {entityPool, Property} from './entity';
 
 // create connection
 
-Tamarillo.connect('orm', 'root', '', {
+Torm.connect('orm', 'root', '', {
   host: 'localhost',
   dialect: 'mysql'
 });
@@ -40,11 +40,15 @@ async function Test() {
 
     // Tamarillo.create(person);
 
-    let persons = await Tamarillo
-        .query(Person.prototype)
-        .findAll() as any;
+    let persons = await Torm.query(Person.prototype)
+        .findAll();
 
+    let count = await Torm.query(Person.prototype)
+        .count('age', 'age') as any;
+
+    console.log(count.age);
     
+    // console.log(persons[0].age);
         
     // let person2 = await Tamarillo
     //     .query(Person.prototype)

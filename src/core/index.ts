@@ -1,4 +1,4 @@
-export * from './Tamarillo';
+export * from './Torm';
 export * from './Query';
 export * from './Result';
 export * from './SequelizeModel';
