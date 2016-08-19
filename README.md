@@ -1,9 +1,9 @@
 # Tamarillo
 Tamarillo is an easy-to-use ORM for Typescript, it's based on Sequelize.
 
-### Still under development
+### Note: Still under development, don't use it in production.
 
-### Usage
+## Usage
 
 Connect to database
 
