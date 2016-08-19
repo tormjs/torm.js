@@ -221,7 +221,7 @@ export class Query<E extends Model> implements QueryApi<E> {
     }
 
     // build excludes query
-    else if (this._whereConditions.length > 0) {
+    else if (this._excludes.length > 0) {
       params.attributes['exclude'] = this._excludes;
     }
 
