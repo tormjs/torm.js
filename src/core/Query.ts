@@ -167,6 +167,7 @@ export class Query<E extends Model> implements QueryApi<E> {
 
    /**
    * Complex query conditions 
+   * TODO: complex where query implementations.
    * 
    * @param {{}} conditions
    * @returns {Query<E>}
@@ -296,7 +297,7 @@ export class Query<E extends Model> implements QueryApi<E> {
     return this;
   }
 
-
+  // TODO: order function implementation
   public order(): Query<E> {
     throw 'Not Implemented';
   }
