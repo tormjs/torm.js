@@ -40,6 +40,7 @@ let person = new Person();
 person.name = 'Eric';
 person.age = 1;
 person.friends = 'Vincent';
+Torm.create(person);
 ```
 
 Query API
