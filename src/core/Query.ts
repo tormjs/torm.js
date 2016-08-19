@@ -84,7 +84,7 @@ interface QueryApi<E extends Model> {
 }
 
 /**
- * Tamarillo query interface 
+ * Torm query interface 
  * 
  * @export
  * @class Query
@@ -260,17 +260,15 @@ export class Query<E extends Model> implements QueryApi<E> {
       params.attributes['exclude'] = this._excludes;
     }
 
-    if (this._limit || this._offset)
+    if (this._limit || this._offset) {
       params = {};
-
+    }
     if (this._limit) {
       params['limit'] = this._limit;
     }
     if (this._offset) {
       params['offset'] = this._offset;
     }
-
-    console.log(params)
 
     return params;
   }
