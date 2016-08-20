@@ -9,6 +9,12 @@ class ClassNotFoundError extends Error {
   }
 }
 
+class WrongMethodInvokedError extends Error {
+  constructor(method: string, instead: string) {
+    super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
+  }
+}
+
 /**
  * Designed API for query operations 
  * 
@@ -22,6 +28,15 @@ interface QueryApi<E extends Model> {
    * @returns {Result<E>}
    */
   findAll(): Result<E>
+
+  /**
+   * Build part conditions, execute and find them.
+   * If we invoke column(), not(),
+   * we can just use find() to execute 
+   * 
+   * @returns {*}
+   */
+  find(): any
 
   /**
    * Specify query columns.
@@ -99,31 +114,9 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @type {E}
    */
   private _clazz: E;
-
-  /**
-   * Sequelize attribute collections
-   * 
-   * @private
-   * @type {Array<any>}
-   */
   private _attributes: Array<any>;
-
-  /**
-   * Sequelize where collections
-   * 
-   * @private
-   * @type {Array<any>}
-   */
   private _whereConditions: Array<Object>;
-
-  /**
-   * Sequelize excludes collections
-   * 
-   * @private
-   * @type {Array<any>}
-   */
   private _excludes: Array<any>;
-
   private _limit: number;
   private _offset: number;
 
@@ -209,61 +202,54 @@ export class Query<E extends Model> implements QueryApi<E> {
     }
     return this;
   }
+  
+  /**
+   * Build part conditions, execute and find them.
+   * If we invoke column(), where(), not(),
+   * we can just use find() to execute 
+   * 
+   * @returns {*}
+   */
+  public find(): any {
+    if (!this._clazz)
+      throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
+    
+    // if column(), not() is invoked, we can just invoke find() to execute query
+    if (this._attributes.length <= 0 && this._excludes.length <= 0)
+      throw new WrongMethodInvokedError('find()', 'findAll()');
+    
+    let modelName = this._clazz.constructor.name.toLowerCase();
+    let model: any = sequelizeModelPool.poll(modelName);
+    return <any>model.findAll(this._buildComplexQuery());
+  }
 
   /**
    * Build all conditions, and executes findAll operation
-   * 
+   * if column(), not() is invoked, we can just use find() method. 
    * @returns {Result<E>}
    */
   public findAll(): Result<E> {
     if (!this._clazz)
       throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
     
+    // if column(), not() is invoked, we can just invoke find() to execute query
+    if (this._attributes.length > 0 || this._excludes.length > 0)
+      throw new WrongMethodInvokedError('findAll()', 'find()');
+    
     // get sequelize model from model pool
     let modelName = this._clazz.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
-    return <Result<E>>model.findAll(this._buildQueryParams());
+    return <Result<E>>model.findAll(this._buildQuery());
   }
 
   /**
-   * Build all params into one object
+   * Basic query composition
    * 
    * @private
    * @returns {Object}
    */
-  private _buildQueryParams(): Object {
-    type Attr = { include?: Array<any>, exclude?: Array<any> };
-    type Param = { attributes?: Array<Attr | string | Object> };
-
-    let params;
-    params = {attributes: []};
-    // build where conditions
-    if (this._whereConditions.length > 0) {
-      let conditions = {};
-      this._whereConditions.forEach(cond => {
-        Object.keys(cond).forEach(key => {
-          conditions[key] = cond[key]
-        });
-      });
-      return { where: conditions };
-    }
-
-    // build attributes
-    else if (this._attributes.length > 0 ) {
-      this._attributes.forEach(attr => {
-        params.attributes.push(attr);
-      });
-    }
-
-    // build excludes query
-    else if (this._excludes.length > 0) {
-      params.attributes['exclude'] = this._excludes;
-    }
-
-    if (this._limit || this._offset) {
-      if (params.attributes.length <= 0)
-        delete params.attributes;
-    }
+  private _buildQuery(): Object {
+    let params = {};
     if (this._limit) {
       params['limit'] = this._limit;
     }
@@ -271,7 +257,59 @@ export class Query<E extends Model> implements QueryApi<E> {
       params['offset'] = this._offset;
     }
 
+    // build where query
+    this._buildWhere(params);
+
     return params;
+  }
+
+  /**
+   * Build comlex query param into one object
+   * 
+   * @private
+   * @returns {Object}
+   */
+  private _buildComplexQuery(): Object {
+    type Attribute = { include?: Array<any>, exclude?: Array<any> };
+    type Parameter = { attributes?: Array<Attribute | string | Object> };
+
+    let params: Parameter = {attributes: []};
+
+    // build attributes
+    if (this._attributes.length > 0 ) {
+      this._attributes.forEach(attr => {
+        params.attributes.push(attr);
+      });
+    }
+
+    // build excludes query
+    if (this._excludes.length > 0) {
+      params.attributes['exclude'] = this._excludes;
+    }
+
+    // build where query
+    this._buildWhere(params);
+
+    return params;
+  }
+
+
+  /**
+   * Build where conditions 
+   * 
+   * @private
+   * @param {Object} param
+   */
+  private _buildWhere(param: Object): void {
+    if (this._whereConditions.length > 0) {
+      let conditions = {};
+      this._whereConditions.forEach(cond => {
+        Object.keys(cond).forEach(key => {
+          conditions[key] = cond[key]
+        });
+      });
+      param['where'] = conditions;
+    }
   }
 
   /**
@@ -300,4 +338,5 @@ export class Query<E extends Model> implements QueryApi<E> {
   public order(): Query<E> {
     throw 'Not Implemented';
   }
+
 }
