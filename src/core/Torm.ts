@@ -65,7 +65,6 @@ export class Torm {
 
   /**
    * Construct a QueryInterface
-   * TODO: modify all query API
    * 
    * @static
    * @returns

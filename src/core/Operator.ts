@@ -151,6 +151,7 @@ export class Operator {
     return this;
   }
 
+  // TODO: complex composite query
   private _checkEvaluation(): Operator {
     // if can not evaluated, return to avoid useless computation
     if (!this._transformType) return this;

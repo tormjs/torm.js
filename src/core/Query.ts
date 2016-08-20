@@ -137,11 +137,11 @@ export class Query<E extends Model> implements IQuery<E> {
 
   /**
    * Count number in specify conditions
-   * [sequelize.fn('COUNT', sequelize.col('hats')), 'no_hats']
+   * [sequelize.fn('COUNT', sequelize.col('hats')), 'no_hats'] 
    * 
-   * @param {string} column
+   * @param {string} [name]
    * @param {string} [alias]
-   * @returns {Query<E>}
+   * @returns {Promise<number>}
    */
   public async count(name?: string, alias?: string): Promise<number> {
     let sequelize = SequelizeDriver.sequelize;
