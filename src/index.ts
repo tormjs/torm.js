@@ -1,8 +1,9 @@
 import "reflect-metadata";
 
-import {Torm, Model, Result} from './core';
-import {Column, Entity} from './decorator';
-import {entityPool, Property} from './entity';
+import { Torm, Model, Result } from './core';
+import { Column, Entity } from './decorator';
+import { entityPool, Property } from './entity';
+import { expr } from './core/Operator';
 
 // create connection
 
@@ -41,7 +42,7 @@ async function Test() {
     Torm.create(person);
 
     let persons = await Torm.query(Person.prototype)
-        .where({ id: 127 })
+        .where(expr('age').lt(0).or().gt(20).expr)
         .findAll();
 
     persons.forEach(p => console.log(p.id))
@@ -56,21 +57,24 @@ async function Test() {
         .offset(2)
         .find();
 
-    all.forEach(a => console.log(a.name));
+    // all.forEach(a => console.log(a.name));
 
-    // let person2 = await Tamarillo
-    //     .query(Person.prototype)
-    //     .count('age')
-    //     .findAll();
+    // Torm.update(Person.prototype)
 
-    // persons.forEach(person => {
-    //     console.log(person.age, person.name, person.friends. person.cnt);
-    // });
-
-    // console.log(persons.cnt);
 
 }
 
 Test().catch(e => {
     console.log(e);
-})
+});
+
+/**
+ * Operator Test
+ */
+
+// cond('age',
+//   or(
+//     lt(1000),
+//     eq(null)
+//   )
+// );

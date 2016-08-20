@@ -1,6 +1,7 @@
 import {SequelizeDriver,sequelizeModelPool,Model} from './';
 import { Result } from './Result';
 import { Query } from './Query';
+import { Update } from './Update';
 
 /**
  * Torm core
@@ -71,6 +72,10 @@ export class Torm {
    */
   static query<E extends Model>(clazz: E): Query<E> {
     return new Result().query(clazz);
+  }
+
+  static update<E extends Model>(clazz: E): Update<E> {
+    return new Result().update(clazz);
   }
 
 }

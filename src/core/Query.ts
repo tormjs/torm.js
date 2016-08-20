@@ -3,13 +3,13 @@ import { Result } from './Result';
 import { SequelizeDriver } from './SequelizeDriver';
 import { sequelizeModelPool } from './SequelizeModelPool';
 
-class ClassNotFoundError extends Error {
+export class ClassNotFoundError extends Error {
   constructor(msg: string) {
     super(msg);
   }
 }
 
-class WrongMethodInvokedError extends Error {
+export class WrongMethodInvokedError extends Error {
   constructor(method: string, instead: string) {
     super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
   }
@@ -20,7 +20,7 @@ class WrongMethodInvokedError extends Error {
  * 
  * @interface QueryApi
  */
-interface QueryApi<E extends Model> {
+interface IQuery<E extends Model> {
   
   /**
    * Build all conditions, and executes findAll operation
@@ -90,11 +90,18 @@ interface QueryApi<E extends Model> {
   offset(num: number): Query<E>
 
   /**
-   * Todo 
+   * Order implementation
    * 
    * @returns {Query<E>}
    */
   order(): Query<E>
+
+  /**
+   * Raw SQL query
+   * 
+   * @returns {Result<E>}
+   */
+  raw(): Result<E>
 
 }
 
@@ -105,7 +112,7 @@ interface QueryApi<E extends Model> {
  * @class Query
  * @template E
  */
-export class Query<E extends Model> implements QueryApi<E> {
+export class Query<E extends Model> implements IQuery<E> {
 
   /**
    * Sequelize entity reference
@@ -354,6 +361,11 @@ export class Query<E extends Model> implements QueryApi<E> {
   // TODO: order function implementation
   public order(): Query<E> {
     throw 'Not Implemented';
+  }
+
+  // TODO: raw sql query
+  public raw(): Result<E> {
+    throw "xxx";
   }
 
 }
