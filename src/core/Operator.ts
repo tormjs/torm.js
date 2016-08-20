@@ -160,26 +160,33 @@ export class Operator {
     let expression = {};
     expression[this._exprName] = {};
     // perform evaluation
-    if (this._transformType === TransformType.AND) {
 
-    }
-    else if (this._transformType === TransformType.OR) {
-      this._operations.forEach((operator, i) => {
-        Object.keys(operator).forEach( key => {
-          // Simple expression
-          if (key.indexOf('$') >= 0) {
-            if (i === 0) {
-              expression[this._exprName]['$or'] = {};
+    switch (this._transformType) {
+      case TransformType.AND: {
+
+        break;
+      }
+
+      case TransformType.OR: {
+
+        this._operations.forEach((operator, i) => {
+          Object.keys(operator).forEach( key => {
+            // Simple expression
+            if (key.indexOf('$') >= 0) {
+              if (i === 0) {
+                expression[this._exprName]['$or'] = {};
+              }
+              expression[this._exprName]['$or'][key] = operator[key];
             }
-            expression[this._exprName]['$or'][key] = operator[key];
-          }
-          // Complex expression of combinition
-          else {
+            // Complex expression of combinition
+            else {
 
-          }
+            }
 
+          });
         });
-      });
+        break;
+      }
     }
 
     this.expr = expression;
