@@ -45,7 +45,7 @@ interface IOperator {
  * @export
  * @class Operator
  */
-class Operator {
+export class Operator {
   private _operations: Array<any>;
   private _exprName: string;
   private _transformType: TransformType;
@@ -147,8 +147,8 @@ class Operator {
     return this;
   }
 
-  public and(...args): void {
-    
+  public and(...args): Operator {
+    return this;
   }
 
   private _checkEvaluation(): Operator {
@@ -180,7 +180,7 @@ class Operator {
         });
       });
     }
-    
+
     this.expr = expression;
     this._transformType = null;
     return this;

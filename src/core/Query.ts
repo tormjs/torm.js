@@ -2,6 +2,7 @@ import { Model } from './SequelizeModel';
 import { Result } from './Result';
 import { SequelizeDriver } from './SequelizeDriver';
 import { sequelizeModelPool } from './SequelizeModelPool';
+import { Operator } from './Operator';
 
 export class ClassNotFoundError extends Error {
   constructor(msg: string) {
@@ -56,12 +57,12 @@ interface IQuery<E extends Model> {
   not(name: string): Query<E>
 
   /**
-   * Complex query conditions 
+   * Complex query
    * 
-   * @param {{}} conditions
+   * @param {Object} conditions
    * @returns {Query<E>}
    */
-  where(conditions: {}): Query<E> 
+  where(conditions: Object): Query<E> 
 
   /**
    * Count number in specify conditions
@@ -172,9 +173,11 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {{}} conditions
    * @returns {Query<E>}
    */
-  public where(conditions: {}): Query<E> {
+  public where(conditions: Object): Query<E> {
     if (!conditions) return this;
-
+    // Compatible for Operator query builder
+    if (conditions instanceof Operator)
+      conditions = (<any>conditions).expr;
     this._whereConditions.push(conditions);
     return this;
   }

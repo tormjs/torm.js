@@ -42,7 +42,7 @@ async function Test() {
     Torm.create(person);
 
     let persons = await Torm.query(Person.prototype)
-        .where(expr('age').lt(0).or().gt(20).expr)
+        .where(expr('age').lt(0).or().gt(20))
         .findAll();
 
     persons.forEach(p => console.log(p.id))
