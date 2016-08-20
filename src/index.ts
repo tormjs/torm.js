@@ -38,18 +38,24 @@ async function Test() {
     person.age = 1;
     person.friends = 'Vincent';
 
-    // Tamarillo.create(person);
+    Torm.create(person);
 
     let persons = await Torm.query(Person.prototype)
-        .where({ id: 1 })
+        .where({ id: 127 })
         .findAll();
 
-    persons.forEach(p => console.log(p.name))
+    persons.forEach(p => console.log(p.id))
 
     let count = await Torm.query(Person.prototype).count();
     console.log(count);
 
-    let all = await Torm.query(Person.prototype).column('name').limit(2).offset(1).findAll();
+    let all = await Torm
+        .query(Person.prototype)
+        .not('name')
+        .limit(3)
+        .offset(2)
+        .find();
+
     all.forEach(a => console.log(a.name));
 
     // let person2 = await Tamarillo
@@ -65,4 +71,6 @@ async function Test() {
 
 }
 
-Test();
+Test().catch(e => {
+    console.log(e);
+})

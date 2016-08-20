@@ -270,10 +270,8 @@ export class Query<E extends Model> implements QueryApi<E> {
    * @returns {Object}
    */
   private _buildComplexQuery(): Object {
-    type Attribute = { include?: Array<any>, exclude?: Array<any> };
-    type Parameter = { attributes?: Array<Attribute | string | Object> };
-
-    let params: Parameter = {attributes: []};
+    let params;
+    params = {attributes: []};
 
     // build attributes
     if (this._attributes.length > 0 ) {
@@ -284,7 +282,27 @@ export class Query<E extends Model> implements QueryApi<E> {
 
     // build excludes query
     if (this._excludes.length > 0) {
-      params.attributes['exclude'] = this._excludes;
+      delete params.attributes;
+      params.attributes = {};
+      params.attributes['exclude'] = [];
+      this._excludes.forEach(ex => {
+        params.attributes['exclude'].push(ex);
+      })
+    }
+
+    if (this._limit || this._offset) {
+      if (this._attributes.length == 0)
+        // avoid query bug of sequelize
+        if (Array.isArray(params.attributes))
+          delete params.attributes; 
+    }
+
+    if (this._limit) {
+      params['limit'] = this._limit;
+    }
+
+    if (this._offset) {
+      params['offset'] = this._offset;
     }
 
     // build where query
@@ -292,7 +310,6 @@ export class Query<E extends Model> implements QueryApi<E> {
 
     return params;
   }
-
 
   /**
    * Build where conditions 
