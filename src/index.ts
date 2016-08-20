@@ -8,13 +8,13 @@ import { expr } from './core/Operator';
 // create connection
 
 Torm.connect('orm', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql'
+    host: 'localhost',
+    dialect: 'mysql'
 });
 
 /**
  * Temperary Test Model
- * 
+ *
  * @class Person
  * @extends {Model}
  */
@@ -23,13 +23,13 @@ Torm.connect('orm', 'root', '', {
 class Person extends Model {
 
     @Column()
-    name: string;
+    name:string;
 
     @Column()
-    age: number;
+    age:number;
 
     @Column()
-    friends: string
+    friends:string
 
 }
 

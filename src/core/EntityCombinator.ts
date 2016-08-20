@@ -4,39 +4,39 @@ import { SequelizeDriver } from '../core';
 
 
 class EmptyPropertyError extends Error {
-  constructor(entity: string) {
-    super(`Property of ${entity} is empty`)
-  } 
+    constructor(entity:string) {
+        super(`Property of ${entity} is empty`)
+    }
 }
 
 /**
  * Compose all the entities' metadata into single Object
- * 
+ *
  * @export
  * @class EntityCombinator
  */
 export class EntityCombinator {
-  
-  /**
-   * Compose entity metadata into Sequence Entity
-   * 
-   * @static
-   * @param {string} entityName
-   * @returns
-   */
-  static compose(entityName: string) {
-    let entity = entityPool.poll(entityName) as Entity<Property>;
 
-    let properties = {};
-    entity.metadata.forEach( (prop: Property) => {
-      properties[prop.propertyName] = {
-        type: prop.propertyType
-      }
-    });
+    /**
+     * Compose entity metadata into Sequence Entity
+     *
+     * @static
+     * @param {string} entityName
+     * @returns
+     */
+    static compose(entityName:string) {
+        let entity = entityPool.poll(entityName) as Entity<Property>;
 
-    if (!properties) throw new EmptyPropertyError(entity.entityName);
+        let properties = {};
+        entity.metadata.forEach((prop:Property) => {
+            properties[prop.propertyName] = {
+                type: prop.propertyType
+            }
+        });
 
-    return Torm.driver.define(entity.entityName, properties);
-    
-  }
+        if (!properties) throw new EmptyPropertyError(entity.entityName);
+
+        return Torm.driver.define(entity.entityName, properties);
+
+    }
 }
