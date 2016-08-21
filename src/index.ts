@@ -8,8 +8,8 @@ import { expr } from './core/Operator';
 // create connection
 
 Torm.connect('orm', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql'
+  host: 'localhost',
+  dialect: 'mysql'
 });
 
 /**
@@ -22,50 +22,50 @@ Torm.connect('orm', 'root', '', {
 @Entity
 class Person extends Model {
 
-    @Column()
-    name:string;
+  @Column()
+  name:string;
 
-    @Column()
-    age:number;
+  @Column()
+  age:number;
 
-    @Column()
-    friends:string
+  @Column()
+  friends:string
 
 }
 
 async function Test() {
-    let person = new Person();
-    person.name = 'Eric';
-    person.age = 1;
-    person.friends = 'Vincent';
+  let person = new Person();
+  person.name = 'Eric';
+  person.age = 1;
+  person.friends = 'Vincent';
 
-    Torm.create(person);
+  Torm.create(person);
 
-    let persons = await Torm.query(Person.prototype)
-        .where(expr('age').lt(0).or().gt(20))
-        .findAll();
+  let persons = await Torm.query(Person.prototype)
+    .where(expr('age').lt(0).or().gt(20))
+    .findAll();
 
-    persons.forEach(p => console.log(p.id))
+  persons.forEach(p => console.log(p.id))
 
-    let count = await Torm.query(Person.prototype).count();
-    console.log(count);
+  let count = await Torm.query(Person.prototype).count();
+  console.log(count);
 
-    let all = await Torm
-        .query(Person.prototype)
-        .not('name')
-        .limit(3)
-        .offset(2)
-        .find();
+  let all = await Torm
+    .query(Person.prototype)
+    .not('name')
+    .limit(3)
+    .offset(2)
+    .find();
 
-    // all.forEach(a => console.log(a.name));
+  // all.forEach(a => console.log(a.name));
 
-    // Torm.update(Person.prototype)
+  // Torm.update(Person.prototype)
 
 
 }
 
 Test().catch(e => {
-    console.log(e);
+  console.log(e);
 });
 
 /**

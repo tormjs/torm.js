@@ -7,10 +7,10 @@ import {SequelizeDriver} from './SequelizeDriver';
  */
 export class Model {
 
-    /** Table basic element */
+  /** Table basic element */
 
-    id:number;
-    createdAt:Date;
-    updatedAt:Date;
+  id:number;
+  createdAt:Date;
+  updatedAt:Date;
 
 }

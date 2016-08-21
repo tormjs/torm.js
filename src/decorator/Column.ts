@@ -10,29 +10,29 @@ import {entityPool, Entity, Property} from '../entity';
  * @returns {Function}
  */
 export function Column(typeOrOptions?, options?):Function {
-    return function (object:Object, propertyName:string) {
+  return function (object:Object, propertyName:string) {
 
-        const entityName = object.constructor.name.toLowerCase();
-        const propertyType = (Reflect.getMetadata("design:type", object, propertyName)
-            .name as string).toLowerCase();
+    const entityName = object.constructor.name.toLowerCase();
+    const propertyType = (Reflect.getMetadata("design:type", object, propertyName)
+      .name as string).toLowerCase();
 
-        let type = TypeResolver.resolve(propertyType);
+    let type = TypeResolver.resolve(propertyType);
 
-        let metadata:Property = {
-            propertyName: propertyName,
-            propertyType: type
-        };
+    let metadata:Property = {
+      propertyName: propertyName,
+      propertyType: type
+    };
 
-        if (entityPool.has(entityName)) {
-            let entity = entityPool.poll(entityName) as Entity<Property>;
-            entity.insert(metadata);
-        }
-        else {
-            let entity = new Entity(entityName);
-            entity.insert(metadata);
-            // insert to entityCollection
-            entityPool.put(entity);
-        }
-
+    if (entityPool.has(entityName)) {
+      let entity = entityPool.poll(entityName) as Entity<Property>;
+      entity.insert(metadata);
     }
+    else {
+      let entity = new Entity(entityName);
+      entity.insert(metadata);
+      // insert to entityCollection
+      entityPool.put(entity);
+    }
+
+  }
 }
