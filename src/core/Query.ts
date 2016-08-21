@@ -6,13 +6,13 @@ import { Operator } from './Operator';
 
 export class ClassNotFoundError extends Error {
   constructor(msg:string) {
-  super(msg);
+    super(msg);
   }
 }
 
 export class WrongMethodInvokedError extends Error {
   constructor(method:string, instead:string) {
-  super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
+    super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
   }
 }
 
@@ -129,10 +129,10 @@ export class Query<E extends Model> implements IQuery<E> {
   private _offset:number;
 
   constructor(clazz:E) {
-  this._clazz = clazz;
-  this._attributes = [];
-  this._whereConditions = [];
-  this._excludes = [];
+    this._clazz = clazz;
+    this._attributes = [];
+    this._whereConditions = [];
+    this._excludes = [];
   }
 
   /**
@@ -144,26 +144,26 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Promise<number>}
    */
   public async count(name?:string, alias?:string):Promise<number> {
-  let sequelize = SequelizeDriver.sequelize;
-  let modelName = this._clazz.constructor.name.toLowerCase();
-  let model:any = sequelizeModelPool.poll(modelName);
-  let param = {attributes: []};
+    let sequelize = SequelizeDriver.sequelize;
+    let modelName = this._clazz.constructor.name.toLowerCase();
+    let model:any = sequelizeModelPool.poll(modelName);
+    let param = {attributes: []};
 
-  // count *
-  if (!name || name.trim() === '') {
-    name = '*';
-  }
+    // count *
+    if (!name || name.trim() === '') {
+      name = '*';
+    }
 
-  if (!alias || alias.trim() === '') {
-    alias = '__alias__';
-  }
+    if (!alias || alias.trim() === '') {
+      alias = '__alias__';
+    }
 
-  param.attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
+    param.attributes.push([sequelize.fn('COUNT', sequelize.col(name)), alias]);
 
-  let retval = await model.findAll(param);
-  if (retval.length <= 0) return;
+    let retval = await model.findAll(param);
+    if (retval.length <= 0) return;
 
-  return retval[0].dataValues[alias];
+    return retval[0].dataValues[alias];
   }
 
   /**
@@ -174,12 +174,12 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Query<E>}
    */
   public where(conditions:Object):Query<E> {
-  if (!conditions) return this;
-  // Compatible for Operator query builder
-  if (conditions instanceof Operator)
-    conditions = (<any>conditions).expr;
-  this._whereConditions.push(conditions);
-  return this;
+    if (!conditions) return this;
+    // Compatible for Operator query builder
+    if (conditions instanceof Operator)
+      conditions = (<any>conditions).expr;
+    this._whereConditions.push(conditions);
+    return this;
   }
 
   /**
@@ -188,10 +188,10 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Query<E>}
    */
   public not(name:string):Query<E> {
-  if (!name) return this;
+    if (!name) return this;
 
-  this._excludes.push(name);
-  return this;
+    this._excludes.push(name);
+    return this;
   }
 
   /**
@@ -203,14 +203,14 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Query<E>}
    */
   public column(name:string, alias?:string):Query<E> {
-  if (!name) return this;
+    if (!name) return this;
 
-  if (!alias)
-    this._attributes.push(name);
-  else {
-    this._attributes.push([name, alias]);
-  }
-  return this;
+    if (!alias)
+      this._attributes.push(name);
+    else {
+      this._attributes.push([name, alias]);
+    }
+    return this;
   }
 
   /**
@@ -221,16 +221,16 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {*}
    */
   public find():any {
-  if (!this._clazz)
-    throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
+    if (!this._clazz)
+      throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
 
-  // if column(), not() is invoked, we can just invoke find() to execute query
-  if (this._attributes.length <= 0 && this._excludes.length <= 0)
-    throw new WrongMethodInvokedError('find()', 'findAll()');
+    // if column(), not() is invoked, we can just invoke find() to execute query
+    if (this._attributes.length <= 0 && this._excludes.length <= 0)
+      throw new WrongMethodInvokedError('find()', 'findAll()');
 
-  let modelName = this._clazz.constructor.name.toLowerCase();
-  let model:any = sequelizeModelPool.poll(modelName);
-  return <any>model.findAll(this._buildComplexQuery());
+    let modelName = this._clazz.constructor.name.toLowerCase();
+    let model:any = sequelizeModelPool.poll(modelName);
+    return <any>model.findAll(this._buildComplexQuery());
   }
 
   /**
@@ -239,17 +239,17 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Result<E>}
    */
   public findAll():Result<E> {
-  if (!this._clazz)
-    throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
+    if (!this._clazz)
+      throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
 
-  // if column(), not() is invoked, we can just invoke find() to execute query
-  if (this._attributes.length > 0 || this._excludes.length > 0)
-    throw new WrongMethodInvokedError('findAll()', 'find()');
+    // if column(), not() is invoked, we can just invoke find() to execute query
+    if (this._attributes.length > 0 || this._excludes.length > 0)
+      throw new WrongMethodInvokedError('findAll()', 'find()');
 
-  // get sequelize model from model pool
-  let modelName = this._clazz.constructor.name.toLowerCase();
-  let model:any = sequelizeModelPool.poll(modelName);
-  return <Result<E>>model.findAll(this._buildQuery());
+    // get sequelize model from model pool
+    let modelName = this._clazz.constructor.name.toLowerCase();
+    let model:any = sequelizeModelPool.poll(modelName);
+    return <Result<E>>model.findAll(this._buildQuery());
   }
 
   /**
@@ -259,18 +259,18 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Object}
    */
   private _buildQuery():Object {
-  let params = {};
-  if (this._limit) {
-    params['limit'] = this._limit;
-  }
-  if (this._offset) {
-    params['offset'] = this._offset;
-  }
+    let params = {};
+    if (this._limit) {
+      params['limit'] = this._limit;
+    }
+    if (this._offset) {
+      params['offset'] = this._offset;
+    }
 
-  // build where query
-  this._buildWhere(params);
+    // build where query
+    this._buildWhere(params);
 
-  return params;
+    return params;
   }
 
   /**
@@ -280,45 +280,45 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Object}
    */
   private _buildComplexQuery():Object {
-  let params;
-  params = {attributes: []};
+    let params;
+    params = {attributes: []};
 
-  // build attributes
-  if (this._attributes.length > 0) {
-    this._attributes.forEach(attr => {
-    params.attributes.push(attr);
-    });
-  }
+    // build attributes
+    if (this._attributes.length > 0) {
+      this._attributes.forEach(attr => {
+        params.attributes.push(attr);
+      });
+    }
 
-  // build excludes query
-  if (this._excludes.length > 0) {
-    delete params.attributes;
-    params.attributes = {};
-    params.attributes['exclude'] = [];
-    this._excludes.forEach(ex => {
-    params.attributes['exclude'].push(ex);
-    })
-  }
-
-  if (this._limit || this._offset) {
-    if (this._attributes.length == 0)
-    // avoid query bug of sequelize
-    if (Array.isArray(params.attributes))
+    // build excludes query
+    if (this._excludes.length > 0) {
       delete params.attributes;
-  }
+      params.attributes = {};
+      params.attributes['exclude'] = [];
+      this._excludes.forEach(ex => {
+        params.attributes['exclude'].push(ex);
+      })
+    }
 
-  if (this._limit) {
-    params['limit'] = this._limit;
-  }
+    if (this._limit || this._offset) {
+      if (this._attributes.length == 0)
+      // avoid query bug of sequelize
+        if (Array.isArray(params.attributes))
+          delete params.attributes;
+    }
 
-  if (this._offset) {
-    params['offset'] = this._offset;
-  }
+    if (this._limit) {
+      params['limit'] = this._limit;
+    }
 
-  // build where query
-  this._buildWhere(params);
+    if (this._offset) {
+      params['offset'] = this._offset;
+    }
 
-  return params;
+    // build where query
+    this._buildWhere(params);
+
+    return params;
   }
 
   /**
@@ -328,15 +328,15 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {Object} param
    */
   private _buildWhere(param:Object):void {
-  if (this._whereConditions.length > 0) {
-    let conditions = {};
-    this._whereConditions.forEach(cond => {
-    Object.keys(cond).forEach(key => {
-      conditions[key] = cond[key]
-    });
-    });
-    param['where'] = conditions;
-  }
+    if (this._whereConditions.length > 0) {
+      let conditions = {};
+      this._whereConditions.forEach(cond => {
+        Object.keys(cond).forEach(key => {
+          conditions[key] = cond[key]
+        });
+      });
+      param['where'] = conditions;
+    }
   }
 
   /**
@@ -346,8 +346,8 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Query<E>}
    */
   public limit(num:number):Query<E> {
-  if (num) this._limit = num;
-  return this;
+    if (num) this._limit = num;
+    return this;
   }
 
   /**
@@ -357,18 +357,18 @@ export class Query<E extends Model> implements IQuery<E> {
    * @returns {Query<E>}
    */
   public offset(num:number):Query<E> {
-  if (num) this._offset = num;
-  return this;
+    if (num) this._offset = num;
+    return this;
   }
 
   // TODO: order function implementation
   public order():Query<E> {
-  throw 'Not Implemented';
+    throw 'Not Implemented';
   }
 
   // TODO: raw sql query
   public raw():Result<E> {
-  throw "xxx";
+    throw "xxx";
   }
 
 }
