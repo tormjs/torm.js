@@ -1,6 +1,6 @@
 import { Model } from './SequelizeModel';
 
-interface IUpdate<E extends Model> {
+export interface IUpdate<E extends Model> {
   where(Object);
   exec(Object);
 }

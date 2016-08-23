@@ -1,10 +1,10 @@
 {
-  "name": "tamarillo",
+  "name": "torm",
   "version": "1.0.0",
   "description": "Tamarillo is an easy-to-use ORM for Typescript, it based on Sequelize.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/"
   },
   "repository": {
     "type": "git",
@@ -16,10 +16,24 @@
     "url": "https://github.com/ele828/tamarillo/issues"
   },
   "homepage": "https://github.com/ele828/tamarillo#readme",
+  "files": [
+    "build/src"
+  ],
   "dependencies": {
-    "@types/node": "^6.0.33",
+    "@types/node": "^6.0.37",
     "mysql": "^2.11.1",
     "reflect-metadata": "^0.1.8",
-    "sequelize": "^3.24.0"
+    "sequelize": "^3.24.0",
+    "ts-node": "^1.3.0",
+    "typeorm": "0.0.2-alpha.49",
+    "typescript": "^2.1.0-dev.20160823"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.31",
+    "@types/expect.js": "^0.3.28",
+    "@types/mocha": "^2.2.30",
+    "chai": "^3.5.0",
+    "expect.js": "^0.3.1",
+    "mocha": "^3.0.2"
   }
 }

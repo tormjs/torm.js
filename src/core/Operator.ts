@@ -120,14 +120,14 @@ export class Operator {
     throw 'Not Implemented';
   }
 
-  public lt(arg):Operator {
+  public lt(arg: any) :Operator {
     let lessThanExpr = {'$lt': arg};
     this._operations.push(lessThanExpr);
     this.expr = lessThanExpr;
     return this._checkEvaluation();
   }
 
-  public gt(arg):Operator {
+  public gt(arg: any) :Operator {
     let greaterThanExpr = {'$gt': arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;

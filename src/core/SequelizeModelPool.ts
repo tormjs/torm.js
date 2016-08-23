@@ -7,7 +7,7 @@
  * @extends {Map<string, T>}
  * @template T
  */
-class SequelizeModelPool<T> extends Map<string, T> {
+export class SequelizeModelPool<T> extends Map<string, T> {
 
   /**
    * Put entity into map

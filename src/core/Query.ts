@@ -21,7 +21,7 @@ export class WrongMethodInvokedError extends Error {
  *
  * @interface QueryApi
  */
-interface IQuery<E extends Model> {
+export interface IQuery<E extends Model> {
 
   /**
    * Build all conditions, and executes findAll operation

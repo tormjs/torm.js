@@ -5,7 +5,14 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noImplicitAny": false,
-        "sourceMap": false
+        "sourceMap": true,
+        "declaration": true,
+        // "noFallthroughCasesInSwitch": true,
+        // "noImplicitReturns": true,
+        // "stripInternal": true,
+        // "pretty": true,
+        // "strictNullChecks": true,
+        "outDir": "build/"
     },
     "exclude": [
         "node_modules"

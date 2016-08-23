@@ -15,7 +15,7 @@ export class EntityNotFoundError extends Error {
 /**
  * Stores table metadata
  */
-class EntityPool<T extends {entityName: string}> extends Map<string, T> {
+export class EntityPool<T extends {entityName: string}> extends Map<string, T> {
 
   put(entity:T):void {
     // find if there exists

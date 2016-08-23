@@ -3,6 +3,11 @@ import { Result } from './Result';
 import { Query } from './Query';
 import { Update } from './Update';
 
+export class ModelDefinitionError extends Error {
+  constructor(modelName: string) {
+    super(`Model '${modelName} is defined inpropriately'`);
+  }
+}
 /**
  * Torm core
  */
@@ -23,7 +28,7 @@ export class Torm {
    * @param {any} args
    */
   static connect(...args) {
-    this._driver = SequelizeDriver.connect(...args);
+    return this._driver = SequelizeDriver.connect(...args);
   }
 
   /**
@@ -47,7 +52,15 @@ export class Torm {
   static sync<E extends Model>(object:E, ...args):Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
     let model:any = sequelizeModelPool.poll(objectName);
-    return model.sync(...args);
+    let rst;
+    try {
+      rst = model.sync(...args);
+    } catch (ex) {
+      if (ex instanceof TypeError) {
+        throw new ModelDefinitionError(objectName);
+      }
+    } 
+    return rst;
   }
 
   /**
