@@ -6,7 +6,7 @@
  */
 export class SequelizeDriver {
 
-  private static _sequelizeDep:any = require("sequelize");
+  private static _sequelizeDep: any = require('sequelize');
 
   /**
    * Connect to database interface
@@ -26,7 +26,7 @@ export class SequelizeDriver {
    * @static
    * @type {*}
    */
-  static get sequelize():any {
+  static get sequelize(): any {
     return this._sequelizeDep;
   }
 

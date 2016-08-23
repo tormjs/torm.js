@@ -1,6 +1,6 @@
 import { assert } from 'chai'; 
 
-import "reflect-metadata";
+import 'reflect-metadata';
 import { Torm, Model, Result } from '../src';
 import { Column, Entity } from '../src';
 import { expr } from '../src';

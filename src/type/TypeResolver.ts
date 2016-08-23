@@ -1,7 +1,7 @@
 import {SequelizeDriver} from '../core';
 
 export class TypeResolver {
-  static resolve(type:string) {
+  static resolve(type: string) {
     switch (type) {
       case 'string':
       {

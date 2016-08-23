@@ -7,8 +7,8 @@ export interface IUpdate<E extends Model> {
 
 export class Update<E extends Model> implements IUpdate<E> {
 
-  private _clazz:E;
-  private _conditions:Array<any>;
+  private _clazz: E;
+  private _conditions: Array<any>;
 
   constructor(clazz) {
     this._clazz = clazz;
@@ -20,7 +20,7 @@ export class Update<E extends Model> implements IUpdate<E> {
    *
    * @param {any} Object
    */
-  public where(Object):void {
+  public where(Object): void {
     throw 'Not Implemented';
   }
 
@@ -29,7 +29,7 @@ export class Update<E extends Model> implements IUpdate<E> {
    *
    * @param {any} Object
    */
-  public exec(Object):void {
+  public exec(Object): void {
     throw 'Not Implemented';
   }
 

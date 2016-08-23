@@ -5,13 +5,13 @@ import { sequelizeModelPool } from './SequelizeModelPool';
 import { Operator } from './Operator';
 
 export class ClassNotFoundError extends Error {
-  constructor(msg:string) {
+  constructor(msg: string) {
     super(msg);
   }
 }
 
 export class WrongMethodInvokedError extends Error {
-  constructor(method:string, instead:string) {
+  constructor(method: string, instead: string) {
     super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
   }
 }
@@ -28,7 +28,7 @@ export interface IQuery<E extends Model> {
    *
    * @returns {Result<E>}
    */
-  findAll(): Result<E>
+  findAll(): Result<E>;
 
   /**
    * Build part conditions, execute and find them.
@@ -37,7 +37,7 @@ export interface IQuery<E extends Model> {
    *
    * @returns {*}
    */
-  find(): any
+  find(): any;
 
   /**
    * Specify query columns.
@@ -47,14 +47,14 @@ export interface IQuery<E extends Model> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  column(name:string, alias?:string): Query<E>
+  column(name: string, alias?: string): Query<E>;
 
   /**
    * Exclude specified columns
    *
    * @returns {Query<E>}
    */
-  not(name:string): Query<E>
+  not(name: string): Query<E>;
 
   /**
    * Complex query
@@ -62,7 +62,7 @@ export interface IQuery<E extends Model> {
    * @param {Object} conditions
    * @returns {Query<E>}
    */
-  where(conditions:Object): Query<E>
+  where(conditions: Object): Query<E>;
 
   /**
    * Count number in specify conditions
@@ -72,7 +72,7 @@ export interface IQuery<E extends Model> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  count(name:string, alias?:string): Promise<number>
+  count(name: string, alias?: string): Promise<number>;
 
   /**
    * Limit record number of each query
@@ -80,7 +80,7 @@ export interface IQuery<E extends Model> {
    * @param {number} num
    * @returns {Query<E>}
    */
-  limit(num:number): Query<E>
+  limit(num: number): Query<E>;
 
   /**
    * Skip record number
@@ -88,21 +88,21 @@ export interface IQuery<E extends Model> {
    * @param {number} num
    * @returns {Query<E>}
    */
-  offset(num:number): Query<E>
+  offset(num: number): Query<E>;
 
   /**
    * Order implementation
    *
    * @returns {Query<E>}
    */
-  order(): Query<E>
+  order(): Query<E>;
 
   /**
    * Raw SQL query
    *
    * @returns {Result<E>}
    */
-  raw(): Result<E>
+  raw(): Result<E>;
 
 }
 
@@ -121,14 +121,14 @@ export class Query<E extends Model> implements IQuery<E> {
    * @private
    * @type {E}
    */
-  private _clazz:E;
-  private _attributes:Array<any>;
-  private _whereConditions:Array<Object>;
-  private _excludes:Array<any>;
-  private _limit:number;
-  private _offset:number;
+  private _clazz: E;
+  private _attributes: Array<any>;
+  private _whereConditions: Array<Object>;
+  private _excludes: Array<any>;
+  private _limit: number;
+  private _offset: number;
 
-  constructor(clazz:E) {
+  constructor(clazz: E) {
     this._clazz = clazz;
     this._attributes = [];
     this._whereConditions = [];
@@ -143,10 +143,10 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {string} [alias]
    * @returns {Promise<number>}
    */
-  public async count(name?:string, alias?:string):Promise<number> {
+  public async count(name?: string, alias?: string): Promise<number> {
     let sequelize = SequelizeDriver.sequelize;
     let modelName = this._clazz.constructor.name.toLowerCase();
-    let model:any = sequelizeModelPool.poll(modelName);
+    let model: any = sequelizeModelPool.poll(modelName);
     let param = {attributes: []};
 
     // count *
@@ -173,7 +173,7 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {{}} conditions
    * @returns {Query<E>}
    */
-  public where(conditions:Object):Query<E> {
+  public where(conditions: Object): Query<E> {
     if (!conditions) return this;
     // Compatible for Operator query builder
     if (conditions instanceof Operator)
@@ -187,7 +187,7 @@ export class Query<E extends Model> implements IQuery<E> {
    *
    * @returns {Query<E>}
    */
-  public not(name:string):Query<E> {
+  public not(name: string): Query<E> {
     if (!name) return this;
 
     this._excludes.push(name);
@@ -202,7 +202,7 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {string} [alias]
    * @returns {Query<E>}
    */
-  public column(name:string, alias?:string):Query<E> {
+  public column(name: string, alias?: string): Query<E> {
     if (!name) return this;
 
     if (!alias)
@@ -220,7 +220,7 @@ export class Query<E extends Model> implements IQuery<E> {
    *
    * @returns {*}
    */
-  public find():any {
+  public find(): any {
     if (!this._clazz)
       throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
 
@@ -229,7 +229,7 @@ export class Query<E extends Model> implements IQuery<E> {
       throw new WrongMethodInvokedError('find()', 'findAll()');
 
     let modelName = this._clazz.constructor.name.toLowerCase();
-    let model:any = sequelizeModelPool.poll(modelName);
+    let model: any = sequelizeModelPool.poll(modelName);
     return <any>model.findAll(this._buildComplexQuery());
   }
 
@@ -238,7 +238,7 @@ export class Query<E extends Model> implements IQuery<E> {
    * if column(), not() is invoked, we can just use find() method.
    * @returns {Result<E>}
    */
-  public findAll():Result<E> {
+  public findAll(): Result<E> {
     if (!this._clazz)
       throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
 
@@ -248,7 +248,7 @@ export class Query<E extends Model> implements IQuery<E> {
 
     // get sequelize model from model pool
     let modelName = this._clazz.constructor.name.toLowerCase();
-    let model:any = sequelizeModelPool.poll(modelName);
+    let model: any = sequelizeModelPool.poll(modelName);
     return <Result<E>>model.findAll(this._buildQuery());
   }
 
@@ -258,7 +258,7 @@ export class Query<E extends Model> implements IQuery<E> {
    * @private
    * @returns {Object}
    */
-  private _buildQuery():Object {
+  private _buildQuery(): Object {
     let params = {};
     if (this._limit) {
       params['limit'] = this._limit;
@@ -279,7 +279,7 @@ export class Query<E extends Model> implements IQuery<E> {
    * @private
    * @returns {Object}
    */
-  private _buildComplexQuery():Object {
+  private _buildComplexQuery(): Object {
     let params;
     params = {attributes: []};
 
@@ -297,11 +297,11 @@ export class Query<E extends Model> implements IQuery<E> {
       params.attributes['exclude'] = [];
       this._excludes.forEach(ex => {
         params.attributes['exclude'].push(ex);
-      })
+      });
     }
 
     if (this._limit || this._offset) {
-      if (this._attributes.length == 0)
+      if (this._attributes.length === 0)
       // avoid query bug of sequelize
         if (Array.isArray(params.attributes))
           delete params.attributes;
@@ -327,12 +327,12 @@ export class Query<E extends Model> implements IQuery<E> {
    * @private
    * @param {Object} param
    */
-  private _buildWhere(param:Object):void {
+  private _buildWhere(param: Object): void {
     if (this._whereConditions.length > 0) {
       let conditions = {};
       this._whereConditions.forEach(cond => {
         Object.keys(cond).forEach(key => {
-          conditions[key] = cond[key]
+          conditions[key] = cond[key];
         });
       });
       param['where'] = conditions;
@@ -345,7 +345,7 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {number} num
    * @returns {Query<E>}
    */
-  public limit(num:number):Query<E> {
+  public limit(num: number): Query<E> {
     if (num) this._limit = num;
     return this;
   }
@@ -356,19 +356,19 @@ export class Query<E extends Model> implements IQuery<E> {
    * @param {number} num
    * @returns {Query<E>}
    */
-  public offset(num:number):Query<E> {
+  public offset(num: number): Query<E> {
     if (num) this._offset = num;
     return this;
   }
 
   // TODO: order function implementation
-  public order():Query<E> {
+  public order(): Query<E> {
     throw 'Not Implemented';
   }
 
   // TODO: raw sql query
-  public raw():Result<E> {
-    throw "xxx";
+  public raw(): Result<E> {
+    throw 'xxx';
   }
 
 }

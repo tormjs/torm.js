@@ -4,8 +4,8 @@ import { SequelizeDriver } from '../core';
 
 
 class EmptyPropertyError extends Error {
-  constructor(entity:string) {
-    super(`Property of ${entity} is empty`)
+  constructor(entity: string) {
+    super(`Property of ${entity} is empty`);
   }
 }
 
@@ -24,14 +24,14 @@ export class EntityCombinator {
    * @param {string} entityName
    * @returns
    */
-  static compose(entityName:string) {
+  static compose(entityName: string) {
     let entity = entityPool.poll(entityName) as Entity<Property>;
 
     let properties = {};
-    entity.metadata.forEach((prop:Property) => {
+    entity.metadata.forEach((prop: Property) => {
       properties[prop.propertyName] = {
         type: prop.propertyType
-      }
+      };
     });
 
     if (!properties) throw new EmptyPropertyError(entity.entityName);

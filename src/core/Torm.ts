@@ -1,4 +1,4 @@
-import {SequelizeDriver,sequelizeModelPool,Model} from './';
+import { SequelizeDriver, sequelizeModelPool, Model } from './';
 import { Result } from './Result';
 import { Query } from './Query';
 import { Update } from './Update';
@@ -19,7 +19,7 @@ export class Torm {
    * @static
    * @type {SequelizeDriver}
    */
-  private static _driver:SequelizeDriver;
+  private static _driver: SequelizeDriver;
 
   /**
    * Connect to database
@@ -38,7 +38,7 @@ export class Torm {
    * @static
    * @type {*}
    */
-  static get driver():any {
+  static get driver(): any {
     return this._driver;
   }
 
@@ -49,9 +49,9 @@ export class Torm {
    * @param {any} args
    * @returns
    */
-  static sync<E extends Model>(object:E, ...args):Promise<E> {
+  static sync<E extends Model>(object: E, ...args): Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
-    let model:any = sequelizeModelPool.poll(objectName);
+    let model: any = sequelizeModelPool.poll(objectName);
     let rst;
     try {
       rst = model.sync(...args);
@@ -59,7 +59,7 @@ export class Torm {
       if (ex instanceof TypeError) {
         throw new ModelDefinitionError(objectName);
       }
-    } 
+    }
     return rst;
   }
 
@@ -70,9 +70,9 @@ export class Torm {
    * @param {Object} object
    * @returns
    */
-  static create<E extends Model>(object:E):Promise<E> {
+  static create<E extends Model>(object: E): Promise<E> {
     let objectName = object.constructor.name.toLowerCase();
-    let model:any = sequelizeModelPool.poll(objectName);
+    let model: any = sequelizeModelPool.poll(objectName);
     return model.create(object);
   }
 
@@ -82,11 +82,11 @@ export class Torm {
    * @static
    * @returns
    */
-  static query<E extends Model>(clazz:E):Query<E> {
+  static query<E extends Model>(clazz: E): Query<E> {
     return new Result().query(clazz);
   }
 
-  static update<E extends Model>(clazz:E):Update<E> {
+  static update<E extends Model>(clazz: E): Update<E> {
     return new Result().update(clazz);
   }
 

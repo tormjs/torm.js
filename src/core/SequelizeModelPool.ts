@@ -15,7 +15,7 @@ export class SequelizeModelPool<T> extends Map<string, T> {
    * @param {string} entityName
    * @param {*} entity
    */
-  put(entityName:string, entity:any) {
+  put(entityName: string, entity: any) {
     if (!this.has(entityName))
       this.set(entityName, entity);
   }
@@ -27,7 +27,7 @@ export class SequelizeModelPool<T> extends Map<string, T> {
    * @param {string} entityName
    * @returns {T}
    */
-  poll(entityName:string):T {
+  poll(entityName: string): T {
     return this.get(entityName);
   }
 }

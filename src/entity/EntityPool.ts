@@ -1,14 +1,14 @@
-import {Entity, Property} from './Entity';
+import { Entity, Property } from './Entity';
 
 export class EntityAlreadyExistError extends Error {
-  constructor(propsName:string) {
-    super(`Entity ${propsName} is already exist in current database`)
+  constructor(propsName: string) {
+    super(`Entity ${propsName} is already exist in current database`);
   }
 }
 
 export class EntityNotFoundError extends Error {
-  constructor(entityName:string) {
-    super(`Entity ${entityName} is not found`)
+  constructor(entityName: string) {
+    super(`Entity ${entityName} is not found`);
   }
 }
 
@@ -17,7 +17,7 @@ export class EntityNotFoundError extends Error {
  */
 export class EntityPool<T extends {entityName: string}> extends Map<string, T> {
 
-  put(entity:T):void {
+  put(entity: T): void {
     // find if there exists
     if (this._hasProperty(entity))
       throw new EntityAlreadyExistError(entity.entityName);
@@ -25,7 +25,7 @@ export class EntityPool<T extends {entityName: string}> extends Map<string, T> {
     this.set(entity.entityName, entity);
   }
 
-  poll(entityName:string):T {
+  poll(entityName: string): T {
     const entity = this.get(entityName);
     if (!entity) {
       throw new EntityNotFoundError(entityName);
@@ -33,7 +33,7 @@ export class EntityPool<T extends {entityName: string}> extends Map<string, T> {
     return entity;
   }
 
-  private _hasProperty(entity:T):boolean {
+  private _hasProperty(entity: T): boolean {
     return this.has(entity.entityName);
   }
 }

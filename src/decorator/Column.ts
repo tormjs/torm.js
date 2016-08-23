@@ -1,5 +1,5 @@
-import {TypeResolver} from '../type'
-import {entityPool, Entity, Property} from '../entity';
+import { TypeResolver } from '../type';
+import { entityPool, Entity, Property } from '../entity';
 
 /**
  * Decorator for @Column, represented for a Column of a Table
@@ -9,16 +9,16 @@ import {entityPool, Entity, Property} from '../entity';
  * @param {any} [options]
  * @returns {Function}
  */
-export function Column(typeOrOptions?, options?):Function {
-  return function (object:Object, propertyName:string) {
+export function Column(typeOrOptions?, options?): Function {
+  return function (object: Object, propertyName: string) {
 
     const entityName = object.constructor.name.toLowerCase();
-    const propertyType = (Reflect.getMetadata("design:type", object, propertyName)
+    const propertyType = (Reflect.getMetadata('design:type', object, propertyName)
       .name as string).toLowerCase();
 
     let type = TypeResolver.resolve(propertyType);
 
-    let metadata:Property = {
+    let metadata: Property = {
       propertyName: propertyName,
       propertyType: type
     };
@@ -34,5 +34,5 @@ export function Column(typeOrOptions?, options?):Function {
       entityPool.put(entity);
     }
 
-  }
+  };
 }
