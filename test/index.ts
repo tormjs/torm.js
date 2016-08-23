@@ -40,8 +40,8 @@ describe('Test basic usage', () => {
     Person = class Person extends Model {
       name: string;
       age: number;
-      friends: string
-    }
+      friends: string;
+    };
   });
 
   it('connect to database successfully', () => {
@@ -49,7 +49,7 @@ describe('Test basic usage', () => {
     let conn = Torm.connect('orm', 'root', '', {
       host: 'localhost',
       dialect: 'mysql'
-    })
+    });
 
     assert.isNotNull(conn);
 
@@ -66,7 +66,7 @@ describe('Test basic usage', () => {
       age: number;
 
       @Column()
-      friends: string
+      friends: string;
     }
 
     let model = await Torm.sync(Person.prototype);
@@ -106,8 +106,8 @@ describe('Query testing', () => {
     Person = class Person extends Model {
       name: string;
       age: number;
-      friends: string
-    }
+      friends: string;
+    };
   });
 
   it('should perform basic count', async () => {
@@ -115,4 +115,4 @@ describe('Query testing', () => {
     assert.isNumber(count);
   });
 
-})
+});
