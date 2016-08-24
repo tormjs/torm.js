@@ -94,7 +94,7 @@ export class Operator {
     return this._checkEvaluation();
   }
 
-  public gt(arg:number): Operator {
+  public gt(arg: number): Operator {
     let greaterThanExpr = {'$gt': arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;

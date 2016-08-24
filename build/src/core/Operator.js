@@ -18,6 +18,24 @@ class Operator {
     static expr(name) {
         return new Operator(name);
     }
+    eq(arg) {
+        let equalExpr = { 'eq': arg };
+        this._operations.push(equalExpr);
+        this.expr = equalExpr;
+        return this._checkEvaluation();
+    }
+    ne(arg) {
+        let notEqual = { 'ne': arg };
+        this._operations.push(notEqual);
+        this.expr = notEqual;
+        return this._checkEvaluation();
+    }
+    lte(arg) {
+        let lessThanOrEqual = { 'lte': arg };
+        this._operations.push(lessThanOrEqual);
+        this.expr = lessThanOrEqual;
+        return this._checkEvaluation();
+    }
     lt(arg) {
         let lessThanExpr = { '$lt': arg };
         this._operations.push(lessThanExpr);
@@ -30,15 +48,12 @@ class Operator {
         this.expr = greaterThanExpr;
         return this._checkEvaluation();
     }
-    eq(arg) {
-        this._operations.push(arg);
-        return this;
-    }
     or(...args) {
         this._transformType = TransformType.OR;
         return this;
     }
     and(...args) {
+        this._transformType = TransformType.AND;
         return this;
     }
     _checkEvaluation() {

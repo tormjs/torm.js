@@ -9,9 +9,11 @@ export declare class Operator {
     expr: Object;
     constructor(name: any);
     static expr(name: any): Operator;
-    lt(arg: any): Operator;
-    gt(arg: any): Operator;
     eq(arg: any): Operator;
+    ne(arg: any): Operator;
+    lte(arg: number): Operator;
+    lt(arg: number): Operator;
+    gt(arg: number): Operator;
     or(...args: Array<Object>): Operator;
     and(...args: any[]): Operator;
     private _checkEvaluation();

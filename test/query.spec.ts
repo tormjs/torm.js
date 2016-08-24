@@ -25,4 +25,30 @@ describe('Operator based expression query syntax', () => {
     }
   });
 
+  it('should perform eq', () => {
+
+  });
+
+  it('should perform ne', () => {
+
+  });
+
+  it('should perform lte', () => {
+
+  });
+
+  it('should perform lt', () => {
+
+  });
+
+  it('should perform gt', () => {
+
+  });
+
+  it('and() transformation', () => {
+
+  });
+
+
+
 });
