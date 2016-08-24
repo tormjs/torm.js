@@ -1,14 +1,6 @@
 "use strict";
 const type_1 = require('../type');
 const entity_1 = require('../entity');
-/**
- * Decorator for @Column, represented for a Column of a Table
- *
- * @export
- * @param {any} [typeOrOptions]
- * @param {any} [options]
- * @returns {Function}
- */
 function Column(typeOrOptions, options) {
     return function (object, propertyName) {
         const entityName = object.constructor.name.toLowerCase();
@@ -26,7 +18,6 @@ function Column(typeOrOptions, options) {
         else {
             let entity = new entity_1.Entity(entityName);
             entity.insert(metadata);
-            // insert to entityCollection
             entity_1.entityPool.put(entity);
         }
     };

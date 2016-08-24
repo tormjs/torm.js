@@ -8,14 +8,6 @@ export declare type Property = {
     propertyName: string;
     propertyType: any;
 };
-/**
- * Stores column metadata
- *
- * @export
- * @class ColumnCollection
- * @extends {Array<T>}
- * @template T
- */
 export declare class Entity<T extends Property> {
     entityName: string;
     private _metadata;

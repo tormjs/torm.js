@@ -7,36 +7,13 @@ class ModelDefinitionError extends Error {
     }
 }
 exports.ModelDefinitionError = ModelDefinitionError;
-/**
- * Torm core
- */
 class Torm {
-    /**
-     * Connect to database
-     *
-     * @static
-     * @param {any} args
-     */
     static connect(...args) {
         return this._driver = _1.SequelizeDriver.connect(...args);
     }
-    /**
-     * Get sequelize driver instance
-     *
-     * @readonly
-     * @static
-     * @type {*}
-     */
     static get driver() {
         return this._driver;
     }
-    /**
-     * Table schema Synchronous
-     *
-     * @static
-     * @param {any} args
-     * @returns
-     */
     static sync(object, ...args) {
         let objectName = object.constructor.name.toLowerCase();
         let model = _1.sequelizeModelPool.poll(objectName);
@@ -51,24 +28,11 @@ class Torm {
         }
         return rst;
     }
-    /**
-     * Create a record in specific table
-     *
-     * @static
-     * @param {Object} object
-     * @returns
-     */
     static create(object) {
         let objectName = object.constructor.name.toLowerCase();
         let model = _1.sequelizeModelPool.poll(objectName);
         return model.create(object);
     }
-    /**
-     * Construct a QueryInterface
-     *
-     * @static
-     * @returns
-     */
     static query(clazz) {
         return new Result_1.Result().query(clazz);
     }

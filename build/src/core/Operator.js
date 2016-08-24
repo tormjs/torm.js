@@ -8,12 +8,6 @@ class TransformType {
 }
 TransformType.AND = 'AND';
 TransformType.OR = 'OR';
-/**
- * Condition operator abstract
- *
- * @export
- * @class Operator
- */
 class Operator {
     constructor(name) {
         this._exprName = name;
@@ -41,22 +35,17 @@ class Operator {
     }
     or(...args) {
         this._transformType = TransformType.OR;
-        // here, do not perform evaluation
-        // because it's definitely not end
         return this;
     }
     and(...args) {
         return this;
     }
-    // TODO: complex composite query
     _checkEvaluation() {
-        // if can not evaluated, return to avoid useless computation
         if (!this._transformType)
             return this;
         let transformType;
         let expression = {};
         expression[this._exprName] = {};
-        // perform evaluation
         switch (this._transformType) {
             case TransformType.AND:
                 {
@@ -68,7 +57,6 @@ class Operator {
                         throw new ArgumentsError('or()');
                     this._operations.forEach((operator, i) => {
                         Object.keys(operator).forEach(key => {
-                            // Simple expression
                             if (key.indexOf('$') >= 0) {
                                 if (i === 0) {
                                     expression[this._exprName]['$or'] = {};

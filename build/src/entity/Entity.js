@@ -11,14 +11,6 @@ class PropertyNotFoundError extends Error {
     }
 }
 exports.PropertyNotFoundError = PropertyNotFoundError;
-/**
- * Stores column metadata
- *
- * @export
- * @class ColumnCollection
- * @extends {Array<T>}
- * @template T
- */
 class Entity {
     constructor(entityName) {
         this.entityName = entityName;
@@ -28,7 +20,6 @@ class Entity {
         return this._metadata;
     }
     insert(column) {
-        // find if there exists
         if (this._hasProperty(column))
             throw new PropertyAlreadyExistError(column.propertyName);
         this._metadata.push(column);

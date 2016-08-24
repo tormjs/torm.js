@@ -11,12 +11,8 @@ class EntityNotFoundError extends Error {
     }
 }
 exports.EntityNotFoundError = EntityNotFoundError;
-/**
- * Stores table metadata
- */
 class EntityPool extends Map {
     put(entity) {
-        // find if there exists
         if (this._hasProperty(entity))
             throw new EntityAlreadyExistError(entity.entityName);
         this.set(entity.entityName, entity);
@@ -33,8 +29,5 @@ class EntityPool extends Map {
     }
 }
 exports.EntityPool = EntityPool;
-/**
- * Singleton pattern
- */
 exports.entityPool = new EntityPool();
 //# sourceMappingURL=EntityPool.js.map

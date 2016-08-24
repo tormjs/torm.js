@@ -4,9 +4,6 @@ export declare class EntityAlreadyExistError extends Error {
 export declare class EntityNotFoundError extends Error {
     constructor(entityName: string);
 }
-/**
- * Stores table metadata
- */
 export declare class EntityPool<T extends {
     entityName: string;
 }> extends Map<string, T> {
@@ -14,9 +11,6 @@ export declare class EntityPool<T extends {
     poll(entityName: string): T;
     private _hasProperty(entity);
 }
-/**
- * Singleton pattern
- */
 export declare const entityPool: EntityPool<{
     entityName: string;
 }>;

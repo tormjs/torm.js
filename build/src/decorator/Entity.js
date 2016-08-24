@@ -1,13 +1,5 @@
 "use strict";
 const core_1 = require('../core');
-/**
- * Decorator for @Entity
- * here we compose all the metadata into SequelizeEntityPool.
- * Everytime, it just composes its own Entity.
- *
- * @export
- * @param {*} target
- */
 function Entity(target) {
     let entityName = target.name.toLowerCase();
     let entity = core_1.EntityCombinator.compose(entityName);

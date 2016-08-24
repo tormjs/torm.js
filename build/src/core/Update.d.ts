@@ -7,16 +7,6 @@ export declare class Update<E extends Model> implements IUpdate<E> {
     private _clazz;
     private _conditions;
     constructor(clazz: any);
-    /**
-     * Update conditions
-     *
-     * @param {any} Object
-     */
     where(Object: any): void;
-    /**
-     * Execute update actions
-     *
-     * @param {any} Object
-     */
     exec(Object: any): void;
 }

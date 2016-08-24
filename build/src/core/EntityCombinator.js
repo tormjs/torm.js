@@ -6,20 +6,7 @@ class EmptyPropertyError extends Error {
         super(`Property of ${entity} is empty`);
     }
 }
-/**
- * Compose all the entities' metadata into single Object
- *
- * @export
- * @class EntityCombinator
- */
 class EntityCombinator {
-    /**
-     * Compose entity metadata into Sequence Entity
-     *
-     * @static
-     * @param {string} entityName
-     * @returns
-     */
     static compose(entityName) {
         let entity = entity_1.entityPool.poll(entityName);
         let properties = {};

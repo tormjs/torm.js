@@ -1,10 +1,4 @@
 /// <reference types="chai" />
-/**
- * Condition operator abstract
- *
- * @export
- * @class Operator
- */
 export declare class Operator {
     private _operations;
     private _exprName;
