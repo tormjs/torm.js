@@ -33,7 +33,7 @@
   },
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "npm run lint && tsc",
+    "build": "npm run lint && npm run test && tsc",
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/"
   }
 }

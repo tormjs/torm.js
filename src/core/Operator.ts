@@ -66,23 +66,39 @@ export class Operator {
     return new Operator(name);
   }
 
-  public lt(arg: any): Operator {
+  public eq(arg: any): Operator {
+    let equalExpr = {'eq': arg};
+    this._operations.push(equalExpr);
+    this.expr = equalExpr; 
+    return this._checkEvaluation();
+  }
+
+  public ne(arg: any): Operator {
+    let notEqual = {'ne': arg};
+    this._operations.push(notEqual);
+    this.expr = notEqual;
+    return this._checkEvaluation();
+  }
+
+  public lte(arg: number): Operator {
+    let lessThanOrEqual = {'lte': arg};
+    this._operations.push(lessThanOrEqual);
+    this.expr = lessThanOrEqual;
+    return this._checkEvaluation();
+  }
+
+  public lt(arg: number): Operator {
     let lessThanExpr = {'$lt': arg};
     this._operations.push(lessThanExpr);
     this.expr = lessThanExpr;
     return this._checkEvaluation();
   }
 
-  public gt(arg: any): Operator {
+  public gt(arg:number): Operator {
     let greaterThanExpr = {'$gt': arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;
     return this._checkEvaluation();
-  }
-
-  public eq(arg): Operator {
-    this._operations.push(arg);
-    return this;
   }
 
   public or(...args: Array<Object>): Operator {
@@ -93,6 +109,7 @@ export class Operator {
   }
 
   public and(...args): Operator {
+    this._transformType = TransformType.AND;
     return this;
   }
 

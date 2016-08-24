@@ -1,4 +1,7 @@
 /// <reference types="chai" />
+export declare class ArgumentsError extends Error {
+    constructor(method: string);
+}
 export declare class Operator {
     private _operations;
     private _exprName;

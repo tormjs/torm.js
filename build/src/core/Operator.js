@@ -4,6 +4,7 @@ class ArgumentsError extends Error {
         super(`Not enough arguments to invoke ${method} method`);
     }
 }
+exports.ArgumentsError = ArgumentsError;
 class TransformType {
 }
 TransformType.AND = 'AND';
