@@ -27,8 +27,6 @@ describe('Test basic usage', () => {
       dialect: 'mysql'
     });
 
-    
-
     assert.isNotNull(conn);
 
   });

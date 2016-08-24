@@ -1,4 +1,4 @@
-class ArgumentsError extends Error {
+export class ArgumentsError extends Error {
   constructor(method: string) {
     super(`Not enough arguments to invoke ${method} method`);
   }
