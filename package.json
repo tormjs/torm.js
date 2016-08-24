@@ -34,6 +34,6 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build": "npm run lint && tsc",
-    "test": "npm run lint && mocha --compilers ts:ts-node/register,tsx:ts-node/register test/"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/"
   }
 }

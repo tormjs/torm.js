@@ -1,3 +1,9 @@
+class ArgumentsError extends Error {
+  constructor(method: string) {
+    super(`Not enough arguments to invoke ${method} method`);
+  }
+}
+
 class TransformType {
   static AND: string = 'AND';
   static OR: string = 'OR';
@@ -109,6 +115,8 @@ export class Operator {
 
       case TransformType.OR:
       {
+        if (this._operations.length <= 1)
+          throw new ArgumentsError('or()');
 
         this._operations.forEach((operator, i) => {
           Object.keys(operator).forEach(key => {

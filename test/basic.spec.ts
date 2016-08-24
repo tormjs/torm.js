@@ -1,6 +1,9 @@
-import { assert } from 'chai'; 
+/**
+ * Basic operation usage
+ */
 
 import 'reflect-metadata';
+import { assert } from 'chai'; 
 import { Torm, Model, Result } from '../src';
 import { Column, Entity } from '../src';
 import { expr } from '../src';
@@ -23,6 +26,8 @@ describe('Test basic usage', () => {
       host: 'localhost',
       dialect: 'mysql'
     });
+
+    
 
     assert.isNotNull(conn);
 
@@ -101,10 +106,10 @@ describe('Query testing', () => {
   });
 
   it('should perform complex expression query syntax', async () => {
-      let rst = await Torm
-        .query(Person.prototype)
-        .where(expr('age').lt(0).or().gt(20))
-        .findAll();
+    let rst = await Torm
+      .query(Person.prototype)
+      .where(expr('age').lt(0).or().gt(20))
+      .findAll();
 
       assert.isArray(rst);
       

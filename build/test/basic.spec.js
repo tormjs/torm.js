@@ -1,3 +1,6 @@
+/**
+ * Basic operation usage
+ */
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -16,29 +19,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const chai_1 = require('chai');
 require('reflect-metadata');
+const chai_1 = require('chai');
 const src_1 = require('../src');
 const src_2 = require('../src');
+const src_3 = require('../src');
 const Torm_1 = require('./../src/core/Torm');
-//   let persons = await Torm.query(Person.prototype)
-//     .where(expr('age').lt(0).or().gt(20))
-//     .findAll();
-//   persons.forEach(p => console.log(p.id))
-//   let count = await Torm.query(Person.prototype).count();
-//   console.log(count);
-//   let all = await Torm
-//     .query(Person.prototype)
-//     .not('name')
-//     .limit(3)
-//     .offset(2)
-//     .find();
-//   // all.forEach(a => console.log(a.name));
-//   // Torm.update(Person.prototype)
-// }
-// Test().catch(e => {
-//   console.log(e);
-// });
 describe('Test basic usage', () => {
     let Person;
     before(() => {
@@ -107,5 +93,21 @@ describe('Query testing', () => {
         let count = yield src_1.Torm.query(Person.prototype).count();
         chai_1.assert.isNumber(count);
     }));
+    it('should perform complex query', () => __awaiter(this, void 0, void 0, function* () {
+        let rst = yield src_1.Torm
+            .query(Person.prototype)
+            .not('name')
+            .limit(3)
+            .offset(2)
+            .find();
+        chai_1.assert.isArray(rst);
+    }));
+    it('should perform complex expression query syntax', () => __awaiter(this, void 0, void 0, function* () {
+        let rst = yield src_1.Torm
+            .query(Person.prototype)
+            .where(src_3.expr('age').lt(0).or().gt(20))
+            .findAll();
+        chai_1.assert.isArray(rst);
+    }));
 });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=basic.spec.js.map

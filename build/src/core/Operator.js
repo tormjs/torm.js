@@ -1,4 +1,9 @@
 "use strict";
+class ArgumentsError extends Error {
+    constructor(method) {
+        super(`Not enough arguments to invoke ${method} method`);
+    }
+}
 class TransformType {
 }
 TransformType.AND = 'AND';
@@ -59,6 +64,8 @@ class Operator {
                 }
             case TransformType.OR:
                 {
+                    if (this._operations.length <= 1)
+                        throw new ArgumentsError('or()');
                     this._operations.forEach((operator, i) => {
                         Object.keys(operator).forEach(key => {
                             // Simple expression
