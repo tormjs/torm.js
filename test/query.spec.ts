@@ -49,6 +49,25 @@ describe('Operator based expression query syntax', () => {
 
   });
 
+  it('should perform in', () => {
+    let rst = expr('test').in(1, 2, 3, 4, 5);
+    let rst1 = expr('test').in([1, 2, 3]);
+    assert.deepEqual(rst.expr, { '$in': [ 1, 2, 3, 4, 5 ] });
+    assert.deepEqual(rst1.expr, { '$in': [ 1, 2, 3 ] });
+
+    // invalid invoke
+    try {
+      expr('test').in([1, 2], [3, 4], 5);
+    } catch (error) {
+
+    }
+  });
+
+  it('or() and and() combinition', () => {
+    let rst = expr('test').lt(20).or().gt(30).and().between(0, 100);
+    // console.log();
+  });
+
 
 
 });

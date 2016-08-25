@@ -1,6 +1,6 @@
 export class ArgumentsError extends Error {
   constructor(method: string) {
-    super(`Not enough arguments to invoke ${method} method`);
+    super(`Not correct number of arguments to invoke ${method} method`);
   }
 }
 
@@ -121,14 +121,54 @@ export class Operator {
   public between(a: number | number[], b?: number): Operator {
     let betweenExpr;
     if (Array.isArray(a) && a.length === 2) {
-        betweenExpr = {'$between': a};
+      betweenExpr = {'$between': a};
     }
     else if (arguments.length === 2) {
-        betweenExpr = {'$between': a, b};
+      betweenExpr = {'$between': [a, b]};
     }
-    else throw new ArgumentsError('between()');
+    else
+      throw new ArgumentsError('between()');
+
     this._operations.push(betweenExpr);
     this.expr = betweenExpr;
+    return this._checkEvaluation();
+  }
+
+  public notBetween(a: number[]): Operator;
+  public notBetween(a: number, b: number): Operator;
+  public notBetween(a: number | number[], b?: number): Operator {
+    let notBetweenExpr;
+    if (Array.isArray(a) && a.length === 2) {
+      notBetweenExpr = {'$notBetween': a};
+    }
+    else if (arguments.length === 2) {
+      notBetweenExpr = {'$notBetween': [a, b]};
+    }
+    else
+      throw new ArgumentsError('notBetween()');
+
+    this._operations.push(notBetweenExpr);
+    this.expr = notBetweenExpr;
+    return this._checkEvaluation();
+  }
+
+  public in(...a: Array<number | number[]>): Operator {
+    let inExpr;
+
+    // pass in array as argument
+    // should be only one array
+    if (Array.isArray(a[0])) {
+      if (a.length !== 1)
+        throw new ArgumentsError('in()');
+      else {
+        inExpr = {'$in': a[0]};
+      }
+    }
+    else
+      inExpr = {'$in': a};
+
+    this._operations.push(inExpr);
+    this.expr = inExpr;
     return this._checkEvaluation();
   }
 
@@ -157,7 +197,7 @@ export class Operator {
     switch (this._transformType) {
       case TransformType.AND:
       {
-
+        console.dir(this._operations);
         break;
       }
 
@@ -185,8 +225,12 @@ export class Operator {
         break;
       }
     }
+    // delete this one item, because it's used already
+    // and now, it's useless, so we clear it for next operation.
+    this._operations.splice(0, this._operations.length);
 
     this.expr = expression;
+    this._operations.push(expression);
     this._transformType = null;
     return this;
   }
