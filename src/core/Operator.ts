@@ -15,14 +15,15 @@ class TransformType {
  * @interface IOperator
  */
 interface IOperator {
-  cond(name): Operator;
+  expr(name): Operator;
   and(...args);
   or(...args): Object;
   eq(...args): Operator;
+  ne(...args): Operator;
   gt(...args);
+  gte(...args): Operator;
   lt(...args);
   lte(...args);
-  notEqual(...args);
   not(...args);
   between(...args);
   notBetween(...args);
@@ -80,13 +81,6 @@ export class Operator {
     return this._checkEvaluation();
   }
 
-  public lte(arg: number): Operator {
-    let lessThanOrEqual = {'lte': arg};
-    this._operations.push(lessThanOrEqual);
-    this.expr = lessThanOrEqual;
-    return this._checkEvaluation();
-  }
-
   public lt(arg: number): Operator {
     let lessThanExpr = {'$lt': arg};
     this._operations.push(lessThanExpr);
@@ -94,10 +88,47 @@ export class Operator {
     return this._checkEvaluation();
   }
 
+  public lte(arg: number): Operator {
+    let lessThanOrEqual = {'lte': arg};
+    this._operations.push(lessThanOrEqual);
+    this.expr = lessThanOrEqual;
+    return this._checkEvaluation();
+  }
+
   public gt(arg: number): Operator {
     let greaterThanExpr = {'$gt': arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;
+    return this._checkEvaluation();
+  }
+
+  public gte(arg: number): Operator {
+    let greaterThanOrEqual = {'gte': arg};
+    this._operations.push(greaterThanOrEqual);
+    this.expr = greaterThanOrEqual;
+    return this._checkEvaluation();
+  }
+
+  public not(arg: boolean): Operator {
+    let notExpr = {'$not': arg};
+    this._operations.push(notExpr);
+    this.expr = notExpr;
+    return this._checkEvaluation();
+  }
+
+  public between(a: number[]): Operator;
+  public between(a: number, b: number): Operator;
+  public between(a: number | number[], b?: number): Operator {
+    let betweenExpr;
+    if (Array.isArray(a) && a.length === 2) {
+        betweenExpr = {'$between': a};
+    }
+    else if (arguments.length === 2) {
+        betweenExpr = {'$between': a, b};
+    }
+    else throw new ArgumentsError('between()');
+    this._operations.push(betweenExpr);
+    this.expr = betweenExpr;
     return this._checkEvaluation();
   }
 
