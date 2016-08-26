@@ -1,9 +1,21 @@
+/**
+ * Length of arguments is inappropriate
+ * 
+ * @export
+ * @class ArgumentsError
+ * @extends {Error}
+ */
 export class ArgumentsError extends Error {
   constructor(method: string) {
     super(`Not correct number of arguments to invoke ${method} method`);
   }
 }
 
+/**
+ * And, Or transformation type definition
+ * 
+ * @class TransformType
+ */
 class TransformType {
   static AND: string = 'AND';
   static OR: string = 'OR';
@@ -14,35 +26,37 @@ class TransformType {
  *
  * @interface IOperator
  */
-interface IOperator {
-  expr(name): Operator;
-  and(...args);
-  or(...args): Object;
-  eq(...args): Operator;
-  ne(...args): Operator;
-  gt(...args);
-  gte(...args): Operator;
-  lt(...args);
-  lte(...args);
-  not(...args);
-  between(...args);
-  notBetween(...args);
-  in(...args);
-  notIn(...args);
-  like(...args);
-  notLike(...args);
+export interface IOperator {
+  eq(arg: number | string | Date): Operator;
+  ne(arg: number | string | Date): Operator ;
+  lt(arg: number | Date): Operator;
+  lte(arg: number | Date): Operator;
+  gt(arg: number | Date): Operator;
+  gte(arg: number | Date): Operator;
+  not(arg: boolean): Operator;
+  between(a: number[] | Date[]): Operator;
+  between(a: number | Date, b: number | Date): Operator;
+  notBetween(a: number[] | Date[]): Operator;
+  notBetween(a: number | Date, b: number | Date): Operator;
+  in(...a: Array<number | number[]>): Operator;
+  notIn(...a: Array<number | number[]>): Operator;
+  like(arg: string): Operator;
+  
+  // Expression combination
+  or(): Operator;
+  and(): Operator;
   // for PostgreSQL
-  iLike(...args);
-  // for PostgreSQL
-  notILike(...args);
-  // for PostgreSQL
-  overlap(...args);
-  // for PostgreSQL
-  contains(...args);
-  // for PostgreSQL
-  contained(...args);
-  // for PostgreSQL
-  any(...args);
+  // iLike(...args);
+  // // for PostgreSQL
+  // notILike(...args);
+  // // for PostgreSQL
+  // overlap(...args);
+  // // for PostgreSQL
+  // contains(...args);
+  // // for PostgreSQL
+  // contained(...args);
+  // // for PostgreSQL
+  // any(...args);
 }
 
 /**
@@ -51,7 +65,7 @@ interface IOperator {
  * @export
  * @class Operator
  */
-export class Operator {
+export class Operator implements IOperator {
   private _operations: Array<any>;
   private _exprName: string;
   private _transformType: TransformType;
@@ -68,34 +82,48 @@ export class Operator {
   }
 
   public eq(arg: number | string | Date): Operator {
-    let equalExpr = {'$eq': arg};
+    this._checkArguments('eq()', arg);
+
+    let equalExpr = {};
+    equalExpr[this._exprName] = {'$eq': arg};
     this._operations.push(equalExpr);
     this.expr = equalExpr; 
     return this._checkEvaluation();
   }
 
   public ne(arg: number | string | Date): Operator {
-    let notEqual = {'$ne': arg};
+    this._checkArguments('ne()', arg);
+
+    let notEqual = {};
+    notEqual[this._exprName] = {'$ne': arg};
     this._operations.push(notEqual);
     this.expr = notEqual;
     return this._checkEvaluation();
   }
 
   public lt(arg: number | Date): Operator {
-    let lessThanExpr = {'$lt': arg};
+    this._checkArguments('lt()', arg);
+
+    let lessThanExpr = {};
+    lessThanExpr[this._exprName] = {'$lt': arg};
     this._operations.push(lessThanExpr);
     this.expr = lessThanExpr;
     return this._checkEvaluation();
   }
 
   public lte(arg: number | Date): Operator {
-    let lessThanOrEqual = {'$lte': arg};
+    this._checkArguments('lte()', arg);
+
+    let lessThanOrEqual = {};
+    lessThanOrEqual[this._exprName] = {'$lte': arg};
     this._operations.push(lessThanOrEqual);
     this.expr = lessThanOrEqual;
     return this._checkEvaluation();
   }
 
   public gt(arg: number | Date): Operator {
+    this._checkArguments('gt()', arg);
+
     let greaterThanExpr = {'$gt': arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;
@@ -103,6 +131,8 @@ export class Operator {
   }
 
   public gte(arg: number | Date): Operator {
+    this._checkArguments('gte()', arg);
+
     let greaterThanOrEqual = {'$gte': arg};
     this._operations.push(greaterThanOrEqual);
     this.expr = greaterThanOrEqual;
@@ -110,6 +140,8 @@ export class Operator {
   }
 
   public not(arg: boolean): Operator {
+    this._checkArguments('not()', arg);
+
     let notExpr = {'$not': arg};
     this._operations.push(notExpr);
     this.expr = notExpr;
@@ -120,6 +152,8 @@ export class Operator {
   public between(a: number[] | Date[]): Operator;
   public between(a: number | Date, b: number | Date): Operator;
   public between(a: number | number[] | Date | Date[], b?: number): Operator {
+    this._checkArguments('between()', a);
+
     let betweenExpr;
     if (Array.isArray(a) && a.length === 2) {
       betweenExpr = {'$between': a};
@@ -138,6 +172,8 @@ export class Operator {
   public notBetween(a: number[] | Date[]): Operator;
   public notBetween(a: number | Date, b: number | Date): Operator;
   public notBetween(a: number | number[] | Date | Date[], b?: number): Operator {
+    this._checkArguments('notBetween()', a);
+
     let notBetweenExpr;
     if (Array.isArray(a) && a.length === 2) {
       notBetweenExpr = {'$notBetween': a};
@@ -154,6 +190,7 @@ export class Operator {
   }
 
   public in(...a: Array<number | number[]>): Operator {
+    this._checkArguments('in()', a);
     let inExpr;
 
     // pass in array as argument
@@ -174,6 +211,7 @@ export class Operator {
   }
 
   public notIn(...a: Array<number | number[]>): Operator {
+    this._checkArguments('notIn()', a);
     let notInExpr;
 
     // pass in array as argument
@@ -194,6 +232,7 @@ export class Operator {
   }
 
   public like(arg: string): Operator {
+    this._checkArguments('like()', arg);
     let likeExpr = {'$like': arg};
     this._operations.push(likeExpr);
     this.expr = likeExpr;
@@ -201,36 +240,39 @@ export class Operator {
   }
 
   public notLike(arg: string): Operator {
+    this._checkArguments('notLike()', arg);
     let notLike = {'$notLike': arg};
     this._operations.push(notLike);
     this.expr = notLike;
     return this._checkEvaluation();
   }
 
-  public or(...args: Array<Object>): Operator {
-    this._unwrapExpression();
+  public or(): Operator {
     this._transformType = TransformType.OR;
     // here, do not perform evaluation
     // because it's definitely not end
     return this;
   }
 
-  public and(...args): Operator {
-    this._unwrapExpression();
+  public and(): Operator {
     this._transformType = TransformType.AND;
     return this;
   }
 
   private _unwrapExpression() {
     // unwrap from test: {} object to {}
-    if (this._operations[0] && this._operations[0][this._exprName])
-      this._operations[0] = this._operations[0][this._exprName];
+    this._operations.forEach((operator, i) => {
+      if (operator[this._exprName])
+        this._operations[i] = operator[this._exprName];
+    });
   }
 
   // TODO: complex composite query
   private _checkEvaluation(): Operator {
     // if can not evaluated, return to avoid useless computation
     if (!this._transformType) return this;
+
+    this._unwrapExpression();
 
     let transformType: TransformType;
     let expression = {};
@@ -252,7 +294,7 @@ export class Operator {
               }
               expression[this._exprName]['$and'][key] = operator[key];
             }
-            // Complex expression of combinition
+            // Complex expression of combination
             else {
 
             }
@@ -277,7 +319,7 @@ export class Operator {
               }
               expression[this._exprName]['$or'][key] = operator[key];
             }
-            // Complex expression of combinition
+            // Complex expression of combination
             else {
 
             }
@@ -295,6 +337,25 @@ export class Operator {
     this._operations.push(expression);
     this._transformType = null;
     return this;
+  }
+
+  /**
+   * Check if argument is valid or invalid
+   * 
+   * @private
+   */
+  private _checkArguments(funcName: string, ...args: Array<any>) {
+    // not empty check
+    if (args.length === 0) {
+      throw new ArgumentsError(funcName);
+    }
+
+    // check not null, undefined
+    args.forEach(arg => {
+      if (arg === null || arg === undefined)
+        throw new ArgumentsError(funcName); 
+    });
+
   }
 
 }

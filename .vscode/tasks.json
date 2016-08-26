@@ -9,7 +9,7 @@
   "tasks": [
     {
       "taskName": "build",
-      "args": ["run", "beforeDebug"]
+      "args": ["run", "before-debug"]
     }
   ]
 }

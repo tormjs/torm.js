@@ -107,4 +107,4 @@ describe('Query testing', () => {
         chai_1.assert.isArray(rst);
     }));
 });
-//# sourceMappingURL=basic.spec.js.map
+//# sourceMappingURL=basic.js.map
