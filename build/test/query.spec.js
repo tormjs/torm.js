@@ -19,5 +19,31 @@ describe('Operator based expression query syntax', () => {
             }
         }
     });
+    it('should perform eq', () => {
+    });
+    it('should perform ne', () => {
+    });
+    it('should perform lte', () => {
+    });
+    it('should perform lt', () => {
+    });
+    it('should perform gt', () => {
+    });
+    it('and() transformation', () => {
+    });
+    it('should perform in', () => {
+        let rst = src_1.expr('test').in(1, 2, 3, 4, 5);
+        let rst1 = src_1.expr('test').in([1, 2, 3]);
+        chai_1.assert.deepEqual(rst.expr, { '$in': [1, 2, 3, 4, 5] });
+        chai_1.assert.deepEqual(rst1.expr, { '$in': [1, 2, 3] });
+        try {
+            src_1.expr('test').in([1, 2], [3, 4], 5);
+        }
+        catch (error) {
+        }
+    });
+    it('or() and and() combinition', () => {
+        let rst = src_1.expr('test').lt(20).or().gt(30).and().between(0, 100);
+    });
 });
 //# sourceMappingURL=query.spec.js.map

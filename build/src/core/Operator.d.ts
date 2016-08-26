@@ -11,9 +11,16 @@ export declare class Operator {
     static expr(name: any): Operator;
     eq(arg: any): Operator;
     ne(arg: any): Operator;
-    lte(arg: number): Operator;
     lt(arg: number): Operator;
+    lte(arg: number): Operator;
     gt(arg: number): Operator;
+    gte(arg: number): Operator;
+    not(arg: boolean): Operator;
+    between(a: number[]): Operator;
+    between(a: number, b: number): Operator;
+    notBetween(a: number[]): Operator;
+    notBetween(a: number, b: number): Operator;
+    in(...a: Array<number | number[]>): Operator;
     or(...args: Array<Object>): Operator;
     and(...args: any[]): Operator;
     private _checkEvaluation();

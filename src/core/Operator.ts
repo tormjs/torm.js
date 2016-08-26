@@ -63,47 +63,47 @@ export class Operator {
     this._transformType = null;
   }
 
-  public static expr(name): Operator {
+  public static col(name): Operator {
     return new Operator(name);
   }
 
-  public eq(arg: any): Operator {
-    let equalExpr = {'eq': arg};
+  public eq(arg: number | string | Date): Operator {
+    let equalExpr = {'$eq': arg};
     this._operations.push(equalExpr);
     this.expr = equalExpr; 
     return this._checkEvaluation();
   }
 
-  public ne(arg: any): Operator {
-    let notEqual = {'ne': arg};
+  public ne(arg: number | string | Date): Operator {
+    let notEqual = {'$ne': arg};
     this._operations.push(notEqual);
     this.expr = notEqual;
     return this._checkEvaluation();
   }
 
-  public lt(arg: number): Operator {
+  public lt(arg: number | Date): Operator {
     let lessThanExpr = {'$lt': arg};
     this._operations.push(lessThanExpr);
     this.expr = lessThanExpr;
     return this._checkEvaluation();
   }
 
-  public lte(arg: number): Operator {
-    let lessThanOrEqual = {'lte': arg};
+  public lte(arg: number | Date): Operator {
+    let lessThanOrEqual = {'$lte': arg};
     this._operations.push(lessThanOrEqual);
     this.expr = lessThanOrEqual;
     return this._checkEvaluation();
   }
 
-  public gt(arg: number): Operator {
+  public gt(arg: number | Date): Operator {
     let greaterThanExpr = {'$gt': arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;
     return this._checkEvaluation();
   }
 
-  public gte(arg: number): Operator {
-    let greaterThanOrEqual = {'gte': arg};
+  public gte(arg: number | Date): Operator {
+    let greaterThanOrEqual = {'$gte': arg};
     this._operations.push(greaterThanOrEqual);
     this.expr = greaterThanOrEqual;
     return this._checkEvaluation();
@@ -116,9 +116,10 @@ export class Operator {
     return this._checkEvaluation();
   }
 
-  public between(a: number[]): Operator;
-  public between(a: number, b: number): Operator;
-  public between(a: number | number[], b?: number): Operator {
+  // new Date(new Date() - 24 * 60 * 60 * 1000)
+  public between(a: number[] | Date[]): Operator;
+  public between(a: number | Date, b: number | Date): Operator;
+  public between(a: number | number[] | Date | Date[], b?: number): Operator {
     let betweenExpr;
     if (Array.isArray(a) && a.length === 2) {
       betweenExpr = {'$between': a};
@@ -134,9 +135,9 @@ export class Operator {
     return this._checkEvaluation();
   }
 
-  public notBetween(a: number[]): Operator;
-  public notBetween(a: number, b: number): Operator;
-  public notBetween(a: number | number[], b?: number): Operator {
+  public notBetween(a: number[] | Date[]): Operator;
+  public notBetween(a: number | Date, b: number | Date): Operator;
+  public notBetween(a: number | number[] | Date | Date[], b?: number): Operator {
     let notBetweenExpr;
     if (Array.isArray(a) && a.length === 2) {
       notBetweenExpr = {'$notBetween': a};
@@ -173,6 +174,7 @@ export class Operator {
   }
 
   public or(...args: Array<Object>): Operator {
+    this._unwrapExpression();
     this._transformType = TransformType.OR;
     // here, do not perform evaluation
     // because it's definitely not end
@@ -180,8 +182,15 @@ export class Operator {
   }
 
   public and(...args): Operator {
+    this._unwrapExpression();
     this._transformType = TransformType.AND;
     return this;
+  }
+
+  private _unwrapExpression() {
+    // unwrap from test: {} object to {}
+    if (this._operations[0] && this._operations[0][this._exprName])
+      this._operations[0] = this._operations[0][this._exprName];
   }
 
   // TODO: complex composite query
@@ -197,13 +206,32 @@ export class Operator {
     switch (this._transformType) {
       case TransformType.AND:
       {
-        console.dir(this._operations);
+        if (this._operations.length < 2)
+          throw new ArgumentsError('and()');
+        
+        this._operations.forEach((operator, i) => {
+          Object.keys(operator).forEach(key => {
+            // Simple expression
+            if (key.indexOf('$') >= 0) {
+              if (i === 0) {
+                expression[this._exprName]['$and'] = {};
+              }
+              expression[this._exprName]['$and'][key] = operator[key];
+            }
+            // Complex expression of combinition
+            else {
+
+            }
+
+          });
+        });
+
         break;
       }
 
       case TransformType.OR:
       {
-        if (this._operations.length <= 1)
+        if (this._operations.length < 2)
           throw new ArgumentsError('or()');
 
         this._operations.forEach((operator, i) => {
@@ -237,4 +265,4 @@ export class Operator {
 
 }
 
-export const expr = Operator.expr;
+export const col = Operator.col;

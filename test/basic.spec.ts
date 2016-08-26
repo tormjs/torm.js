@@ -6,7 +6,7 @@ import 'reflect-metadata';
 import { assert } from 'chai'; 
 import { Torm, Model, Result } from '../src';
 import { Column, Entity } from '../src';
-import { expr } from '../src';
+import { col } from '../src';
 import { ModelDefinitionError } from './../src/core/Torm';
 
 describe('Test basic usage', () => {
@@ -106,7 +106,7 @@ describe('Query testing', () => {
   it('should perform complex expression query syntax', async () => {
     let rst = await Torm
       .query(Person.prototype)
-      .where(expr('age').lt(0).or().gt(20))
+      .where(col('age').lt(0).or().gt(20))
       .findAll();
 
       assert.isArray(rst);
