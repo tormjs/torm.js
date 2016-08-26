@@ -11,14 +11,32 @@ export class ArgumentsError extends Error {
   }
 }
 
+export class OperatorType {
+  static get AND(): string {return '$and'; }
+  static get OR(): string {return '$or'; }
+  static get EQ(): string { return '$eq'; }
+  static get NE(): string { return '$ne'; }
+  static get LT(): string { return '$lt'; }
+  static get LTE(): string { return '$lte'; }
+  static get GT(): string { return '$gt'; }
+  static get GTE(): string { return '$gte'; }
+  static get NOT(): string { return '$not'; }
+  static get BEWTWEEN(): string { return '$between'; }
+  static get NOT_BEWTWEEN(): string { return '$notBetween'; }
+  static get IN(): string { return '$in'; }
+  static get NOT_IN(): string { return '$notIn'; }
+  static get LIKE(): string { return '$like'; }
+  static get NOT_LIKE(): string {return '$notLike'; }
+}
+
 /**
  * And, Or transformation type definition
  * 
  * @class TransformType
  */
-class TransformType {
-  static AND: string = 'AND';
-  static OR: string = 'OR';
+export class TransformType {
+  static get AND(): string { return OperatorType.AND; }
+  static get OR(): string { return OperatorType.OR; }
 }
 
 /**
@@ -82,67 +100,67 @@ export class Operator implements IOperator {
   }
 
   public eq(arg: number | string | Date): Operator {
-    this._checkArguments('eq()', arg);
+    this._checkArguments(OperatorType.EQ, arg);
 
     let equalExpr = {};
-    equalExpr[this._exprName] = {'$eq': arg};
+    equalExpr[this._exprName] = {[OperatorType.EQ]: arg};
     this._operations.push(equalExpr);
     this.expr = equalExpr; 
     return this._checkEvaluation();
   }
 
   public ne(arg: number | string | Date): Operator {
-    this._checkArguments('ne()', arg);
+    this._checkArguments(OperatorType.NE, arg);
 
     let notEqual = {};
-    notEqual[this._exprName] = {'$ne': arg};
+    notEqual[this._exprName] = {[OperatorType.NE]: arg};
     this._operations.push(notEqual);
     this.expr = notEqual;
     return this._checkEvaluation();
   }
 
   public lt(arg: number | Date): Operator {
-    this._checkArguments('lt()', arg);
+    this._checkArguments(OperatorType.LT, arg);
 
     let lessThanExpr = {};
-    lessThanExpr[this._exprName] = {'$lt': arg};
+    lessThanExpr[this._exprName] = {[OperatorType.LT]: arg};
     this._operations.push(lessThanExpr);
     this.expr = lessThanExpr;
     return this._checkEvaluation();
   }
 
   public lte(arg: number | Date): Operator {
-    this._checkArguments('lte()', arg);
+    this._checkArguments(OperatorType.LTE, arg);
 
     let lessThanOrEqual = {};
-    lessThanOrEqual[this._exprName] = {'$lte': arg};
+    lessThanOrEqual[this._exprName] = {[OperatorType.LTE]: arg};
     this._operations.push(lessThanOrEqual);
     this.expr = lessThanOrEqual;
     return this._checkEvaluation();
   }
 
   public gt(arg: number | Date): Operator {
-    this._checkArguments('gt()', arg);
+    this._checkArguments(OperatorType.GT, arg);
 
-    let greaterThanExpr = {'$gt': arg};
+    let greaterThanExpr = {[OperatorType.GT]: arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;
     return this._checkEvaluation();
   }
 
   public gte(arg: number | Date): Operator {
-    this._checkArguments('gte()', arg);
+    this._checkArguments(OperatorType.GTE, arg);
 
-    let greaterThanOrEqual = {'$gte': arg};
+    let greaterThanOrEqual = {[OperatorType.GTE]: arg};
     this._operations.push(greaterThanOrEqual);
     this.expr = greaterThanOrEqual;
     return this._checkEvaluation();
   }
 
   public not(arg: boolean): Operator {
-    this._checkArguments('not()', arg);
+    this._checkArguments(OperatorType.NOT, arg);
 
-    let notExpr = {'$not': arg};
+    let notExpr = {[OperatorType.NOT]: arg};
     this._operations.push(notExpr);
     this.expr = notExpr;
     return this._checkEvaluation();
@@ -152,17 +170,17 @@ export class Operator implements IOperator {
   public between(a: number[] | Date[]): Operator;
   public between(a: number | Date, b: number | Date): Operator;
   public between(a: number | number[] | Date | Date[], b?: number): Operator {
-    this._checkArguments('between()', a);
+    this._checkArguments(OperatorType.BEWTWEEN, a);
 
     let betweenExpr;
     if (Array.isArray(a) && a.length === 2) {
-      betweenExpr = {'$between': a};
+      betweenExpr = {[OperatorType.BEWTWEEN]: a};
     }
     else if (arguments.length === 2) {
-      betweenExpr = {'$between': [a, b]};
+      betweenExpr = {[OperatorType.BEWTWEEN]: [a, b]};
     }
     else
-      throw new ArgumentsError('between()');
+      throw new ArgumentsError(OperatorType.BEWTWEEN);
 
     this._operations.push(betweenExpr);
     this.expr = betweenExpr;
@@ -172,17 +190,17 @@ export class Operator implements IOperator {
   public notBetween(a: number[] | Date[]): Operator;
   public notBetween(a: number | Date, b: number | Date): Operator;
   public notBetween(a: number | number[] | Date | Date[], b?: number): Operator {
-    this._checkArguments('notBetween()', a);
+    this._checkArguments(OperatorType.NOT_BEWTWEEN, a);
 
     let notBetweenExpr;
     if (Array.isArray(a) && a.length === 2) {
-      notBetweenExpr = {'$notBetween': a};
+      notBetweenExpr = {[OperatorType.NOT_BEWTWEEN]: a};
     }
     else if (arguments.length === 2) {
-      notBetweenExpr = {'$notBetween': [a, b]};
+      notBetweenExpr = {[OperatorType.NOT_BEWTWEEN]: [a, b]};
     }
     else
-      throw new ArgumentsError('notBetween()');
+      throw new ArgumentsError(OperatorType.NOT_BEWTWEEN);
 
     this._operations.push(notBetweenExpr);
     this.expr = notBetweenExpr;
@@ -190,20 +208,20 @@ export class Operator implements IOperator {
   }
 
   public in(...a: Array<number | number[]>): Operator {
-    this._checkArguments('in()', a);
+    this._checkArguments(OperatorType.IN, a);
     let inExpr;
 
     // pass in array as argument
     // should be only one array
     if (Array.isArray(a[0])) {
       if (a.length !== 1)
-        throw new ArgumentsError('in()');
+        throw new ArgumentsError(OperatorType.IN);
       else {
-        inExpr = {'$in': a[0]};
+        inExpr = {[OperatorType.IN]: a[0]};
       }
     }
     else
-      inExpr = {'$in': a};
+      inExpr = {[OperatorType.IN]: a};
 
     this._operations.push(inExpr);
     this.expr = inExpr;
@@ -211,20 +229,20 @@ export class Operator implements IOperator {
   }
 
   public notIn(...a: Array<number | number[]>): Operator {
-    this._checkArguments('notIn()', a);
+    this._checkArguments(OperatorType.NOT_IN, a);
     let notInExpr;
 
     // pass in array as argument
     // should be only one array
     if (Array.isArray(a[0])) {
       if (a.length !== 1)
-        throw new ArgumentsError('notIn()');
+        throw new ArgumentsError(OperatorType.NOT_IN);
       else {
-        notInExpr = {'$notIn': a[0]};
+        notInExpr = {[OperatorType.NOT_IN]: a[0]};
       }
     }
     else
-      notInExpr = {'$notIn': a};
+      notInExpr = {[OperatorType.NOT_IN]: a};
 
     this._operations.push(notInExpr);
     this.expr = notInExpr;
@@ -232,16 +250,16 @@ export class Operator implements IOperator {
   }
 
   public like(arg: string): Operator {
-    this._checkArguments('like()', arg);
-    let likeExpr = {'$like': arg};
+    this._checkArguments(OperatorType.LIKE, arg);
+    let likeExpr = {[OperatorType.LIKE]: arg};
     this._operations.push(likeExpr);
     this.expr = likeExpr;
     return this._checkEvaluation();
   }
 
   public notLike(arg: string): Operator {
-    this._checkArguments('notLike()', arg);
-    let notLike = {'$notLike': arg};
+    this._checkArguments(OperatorType.NOT_LIKE, arg);
+    let notLike = {[OperatorType.NOT_LIKE]: arg};
     this._operations.push(notLike);
     this.expr = notLike;
     return this._checkEvaluation();
@@ -283,18 +301,18 @@ export class Operator implements IOperator {
       case TransformType.AND:
       {
         if (this._operations.length < 2)
-          throw new ArgumentsError('and()');
+          throw new ArgumentsError(OperatorType.AND);
         
         this._operations.forEach((operator, i) => {
           Object.keys(operator).forEach(key => {
             // Simple expression
             if (key.indexOf('$') >= 0) {
               if (i === 0) {
-                expression[this._exprName]['$and'] = {};
+                expression[this._exprName][OperatorType.AND] = {};
               }
-              expression[this._exprName]['$and'][key] = operator[key];
+              expression[this._exprName][OperatorType.AND][key] = operator[key];
             }
-            // Complex expression of combination
+            // TODO: Complex expression of combination
             else {
 
             }
@@ -308,18 +326,18 @@ export class Operator implements IOperator {
       case TransformType.OR:
       {
         if (this._operations.length < 2)
-          throw new ArgumentsError('or()');
+          throw new ArgumentsError(OperatorType.OR);
 
         this._operations.forEach((operator, i) => {
           Object.keys(operator).forEach(key => {
             // Simple expression
             if (key.indexOf('$') >= 0) {
               if (i === 0) {
-                expression[this._exprName]['$or'] = {};
+                expression[this._exprName][OperatorType.OR] = {};
               }
-              expression[this._exprName]['$or'][key] = operator[key];
+              expression[this._exprName][OperatorType.OR][key] = operator[key];
             }
-            // Complex expression of combination
+            // TODO: Complex expression of combination
             else {
 
             }
@@ -340,7 +358,7 @@ export class Operator implements IOperator {
   }
 
   /**
-   * Check if argument is valid or invalid
+   * Check if argument is invalid
    * 
    * @private
    */
@@ -352,7 +370,7 @@ export class Operator implements IOperator {
 
     // check not null, undefined
     args.forEach(arg => {
-      if (arg === null || arg === undefined)
+      if (arg === null || arg === undefined || arg === [])
         throw new ArgumentsError(funcName); 
     });
 
