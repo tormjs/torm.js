@@ -173,6 +173,40 @@ export class Operator {
     return this._checkEvaluation();
   }
 
+  public notIn(...a: Array<number | number[]>): Operator {
+    let notInExpr;
+
+    // pass in array as argument
+    // should be only one array
+    if (Array.isArray(a[0])) {
+      if (a.length !== 1)
+        throw new ArgumentsError('notIn()');
+      else {
+        notInExpr = {'$notIn': a[0]};
+      }
+    }
+    else
+      notInExpr = {'$notIn': a};
+
+    this._operations.push(notInExpr);
+    this.expr = notInExpr;
+    return this._checkEvaluation();
+  }
+
+  public like(arg: string): Operator {
+    let likeExpr = {'$like': arg};
+    this._operations.push(likeExpr);
+    this.expr = likeExpr;
+    return this._checkEvaluation();
+  }
+
+  public notLike(arg: string): Operator {
+    let notLike = {'$notLike': arg};
+    this._operations.push(notLike);
+    this.expr = notLike;
+    return this._checkEvaluation();
+  }
+
   public or(...args: Array<Object>): Operator {
     this._unwrapExpression();
     this._transformType = TransformType.OR;

@@ -15,17 +15,17 @@ class Operator {
         this._operations = [];
         this._transformType = null;
     }
-    static expr(name) {
+    static col(name) {
         return new Operator(name);
     }
     eq(arg) {
-        let equalExpr = { 'eq': arg };
+        let equalExpr = { '$eq': arg };
         this._operations.push(equalExpr);
         this.expr = equalExpr;
         return this._checkEvaluation();
     }
     ne(arg) {
-        let notEqual = { 'ne': arg };
+        let notEqual = { '$ne': arg };
         this._operations.push(notEqual);
         this.expr = notEqual;
         return this._checkEvaluation();
@@ -37,7 +37,7 @@ class Operator {
         return this._checkEvaluation();
     }
     lte(arg) {
-        let lessThanOrEqual = { 'lte': arg };
+        let lessThanOrEqual = { '$lte': arg };
         this._operations.push(lessThanOrEqual);
         this.expr = lessThanOrEqual;
         return this._checkEvaluation();
@@ -49,7 +49,7 @@ class Operator {
         return this._checkEvaluation();
     }
     gte(arg) {
-        let greaterThanOrEqual = { 'gte': arg };
+        let greaterThanOrEqual = { '$gte': arg };
         this._operations.push(greaterThanOrEqual);
         this.expr = greaterThanOrEqual;
         return this._checkEvaluation();
@@ -104,12 +104,18 @@ class Operator {
         return this._checkEvaluation();
     }
     or(...args) {
+        this._unwrapExpression();
         this._transformType = TransformType.OR;
         return this;
     }
     and(...args) {
+        this._unwrapExpression();
         this._transformType = TransformType.AND;
         return this;
+    }
+    _unwrapExpression() {
+        if (this._operations[0] && this._operations[0][this._exprName])
+            this._operations[0] = this._operations[0][this._exprName];
     }
     _checkEvaluation() {
         if (!this._transformType)
@@ -120,12 +126,25 @@ class Operator {
         switch (this._transformType) {
             case TransformType.AND:
                 {
-                    console.dir(this._operations);
+                    if (this._operations.length < 2)
+                        throw new ArgumentsError('and()');
+                    this._operations.forEach((operator, i) => {
+                        Object.keys(operator).forEach(key => {
+                            if (key.indexOf('$') >= 0) {
+                                if (i === 0) {
+                                    expression[this._exprName]['$and'] = {};
+                                }
+                                expression[this._exprName]['$and'][key] = operator[key];
+                            }
+                            else {
+                            }
+                        });
+                    });
                     break;
                 }
             case TransformType.OR:
                 {
-                    if (this._operations.length <= 1)
+                    if (this._operations.length < 2)
                         throw new ArgumentsError('or()');
                     this._operations.forEach((operator, i) => {
                         Object.keys(operator).forEach(key => {
@@ -150,5 +169,5 @@ class Operator {
     }
 }
 exports.Operator = Operator;
-exports.expr = Operator.expr;
+exports.col = Operator.col;
 //# sourceMappingURL=Operator.js.map

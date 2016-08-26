@@ -102,7 +102,7 @@ describe('Query testing', () => {
     it('should perform complex expression query syntax', () => __awaiter(this, void 0, void 0, function* () {
         let rst = yield src_1.Torm
             .query(Person.prototype)
-            .where(src_3.expr('age').lt(0).or().gt(20))
+            .where(src_3.col('age').lt(0).or().gt(20))
             .findAll();
         chai_1.assert.isArray(rst);
     }));
