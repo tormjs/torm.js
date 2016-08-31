@@ -9,6 +9,12 @@ class EmptyPropertyError extends Error {
   }
 }
 
+class NoDatabaseConnectError extends Error {
+  constructor(op: string) {
+    super(`Should connect to database before ${op} operation`);
+  }
+}
+
 /**
  * Compose all the entities' metadata into single Object
  *
@@ -19,12 +25,18 @@ export class EntityCombinator {
 
   /**
    * Compose entity metadata into Sequence Entity
+   * if it didn't connect to db, will throw an Error
    *
    * @static
    * @param {string} entityName
    * @returns
    */
   static compose(entityName: string) {
+    // no database connection
+    if (!Torm.driver) {
+      throw new NoDatabaseConnectError(`EntityCombinator.compose()`);
+    }
+
     let entity = entityPool.poll(entityName) as Entity<Property>;
 
     let properties = {};

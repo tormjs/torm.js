@@ -142,7 +142,8 @@ export class Operator implements IOperator {
   public gt(arg: number | Date): Operator {
     this._checkArguments(OperatorType.GT, arg);
 
-    let greaterThanExpr = {[OperatorType.GT]: arg};
+    let greaterThanExpr = {};
+    greaterThanExpr[this._exprName] = {[OperatorType.GT]: arg};
     this._operations.push(greaterThanExpr);
     this.expr = greaterThanExpr;
     return this._checkEvaluation();

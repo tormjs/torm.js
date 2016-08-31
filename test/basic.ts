@@ -8,6 +8,7 @@ import { Torm, Model, Result } from '../src';
 import { Column, Entity } from '../src';
 import { col } from '../src';
 import { ModelDefinitionError } from './../src/core/Torm';
+import { entityPool } from '../src/entity';
 
 describe('Test basic usage', () => {
   let Person;
@@ -100,6 +101,7 @@ describe('Query testing', () => {
       .find();
 
     assert.isArray(rst);
+    assert.equal(rst.length, 3);
 
   });
 
