@@ -152,7 +152,8 @@ export class Operator implements IOperator {
   public gte(arg: number | Date): Operator {
     this._checkArguments(OperatorType.GTE, arg);
 
-    let greaterThanOrEqual = {[OperatorType.GTE]: arg};
+    let greaterThanOrEqual = {};
+    greaterThanOrEqual[this._exprName] = {[OperatorType.GTE]: arg};
     this._operations.push(greaterThanOrEqual);
     this.expr = greaterThanOrEqual;
     return this._checkEvaluation();
@@ -161,7 +162,8 @@ export class Operator implements IOperator {
   public not(arg: boolean): Operator {
     this._checkArguments(OperatorType.NOT, arg);
 
-    let notExpr = {[OperatorType.NOT]: arg};
+    let notExpr = {};
+    notExpr[this._exprName] = {[OperatorType.NOT]: arg};
     this._operations.push(notExpr);
     this.expr = notExpr;
     return this._checkEvaluation();
@@ -173,12 +175,12 @@ export class Operator implements IOperator {
   public between(a: number | number[] | Date | Date[], b?: number): Operator {
     this._checkArguments(OperatorType.BEWTWEEN, a);
 
-    let betweenExpr;
+    let betweenExpr = {};
     if (Array.isArray(a) && a.length === 2) {
-      betweenExpr = {[OperatorType.BEWTWEEN]: a};
+      betweenExpr[this._exprName] = {[OperatorType.BEWTWEEN]: a};
     }
     else if (arguments.length === 2) {
-      betweenExpr = {[OperatorType.BEWTWEEN]: [a, b]};
+      betweenExpr[this._exprName] = {[OperatorType.BEWTWEEN]: [a, b]};
     }
     else
       throw new ArgumentsError(OperatorType.BEWTWEEN);
@@ -193,12 +195,12 @@ export class Operator implements IOperator {
   public notBetween(a: number | number[] | Date | Date[], b?: number): Operator {
     this._checkArguments(OperatorType.NOT_BEWTWEEN, a);
 
-    let notBetweenExpr;
+    let notBetweenExpr = {};
     if (Array.isArray(a) && a.length === 2) {
-      notBetweenExpr = {[OperatorType.NOT_BEWTWEEN]: a};
+      notBetweenExpr[this._exprName] = {[OperatorType.NOT_BEWTWEEN]: a};
     }
     else if (arguments.length === 2) {
-      notBetweenExpr = {[OperatorType.NOT_BEWTWEEN]: [a, b]};
+      notBetweenExpr[this._exprName] = {[OperatorType.NOT_BEWTWEEN]: [a, b]};
     }
     else
       throw new ArgumentsError(OperatorType.NOT_BEWTWEEN);
@@ -210,7 +212,7 @@ export class Operator implements IOperator {
 
   public in(...a: Array<number | number[]>): Operator {
     this._checkArguments(OperatorType.IN, a);
-    let inExpr;
+    let inExpr = {};
 
     // pass in array as argument
     // should be only one array
@@ -218,11 +220,11 @@ export class Operator implements IOperator {
       if (a.length !== 1)
         throw new ArgumentsError(OperatorType.IN);
       else {
-        inExpr = {[OperatorType.IN]: a[0]};
+        inExpr[this._exprName] = {[OperatorType.IN]: a[0]};
       }
     }
     else
-      inExpr = {[OperatorType.IN]: a};
+      inExpr[this._exprName] = {[OperatorType.IN]: a};
 
     this._operations.push(inExpr);
     this.expr = inExpr;
