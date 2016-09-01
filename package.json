@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/ele828/torm.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Eric Wong",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ele828/torm/issues"
   },
