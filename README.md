@@ -1,6 +1,8 @@
 <img width="130"src="https://raw.githubusercontent.com/tormjs/torm/master/docs/torm.png">
 
-# Torm <a href="https://circleci.com/gh/tormjs/torm/tree/master"><img src="https://img.shields.io/circleci/project/tormjs/torm/master.svg" alt="Build Status"></a>
+<a href="https://circleci.com/gh/tormjs/torm/tree/master"><img src="https://img.shields.io/circleci/project/tormjs/torm/master.svg" alt="Build Status"></a>
+
+# Torm
 <a href="https://codecov.io/github/hi-plan/hi-router?branch=master"><img src="https://img.shields.io/codecov/c/github/hi-plan/hi-router/master.svg" alt="Coverage Status"></a>
 Torm is an easy-to-use ORM for Typescript, it's built on Sequelize.
 
