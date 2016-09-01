@@ -23,7 +23,7 @@ describe('Test basic usage', () => {
 
   it('connect to database successfully', () => {
 
-    let conn = Torm.connect('orm', 'ubuntu', '', {
+    let conn = Torm.connect('circle_test', 'ubuntu', '', {
       host: 'localhost',
       dialect: 'mysql'
     });
