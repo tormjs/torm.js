@@ -16,7 +16,7 @@ Torm.connect('orm', 'root', '', {
 });
 ```
 
-Model definition
+### Model definition
 
 ```typescript
 @Entity
@@ -34,7 +34,7 @@ class Person extends Model {
 }
 ```
 
-Create a model
+### Model creation
 
 ```typescript
 let person = new Person();
@@ -44,11 +44,11 @@ person.friends = 'Vincent';
 Torm.create(person);
 ```
 
-Query API
+### Query API
 
 ```typescript
 let persons = await Torm.query(Person.prototype)
-    .where({ id: 1 })
+    .where(col('id').eq(1))
     .findAll();
 
 persons.forEach(p => console.log(p.name))
@@ -58,6 +58,19 @@ console.log(count);
 
 let all = await Torm.query(Person.prototype).limit(2).offset(1).findAll();
 all.forEach(a => console.log(a.id));
+```
+
+Fluent Query API
+
+```typescript
+const cond = col('age').lt(20);    // age < 20
+const cond = col('age').lt(30).or().gt(20);    // age > 20 or age < 30
+const cond = col('age').lt(30).and().gt(20);     // age > 20 and age < 30
+
+const cond = col('id').between(20, 30);
+
+// and more APIs...
+
 ```
 
 ## License
