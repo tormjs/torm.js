@@ -5,6 +5,16 @@
 # Torm
 Torm is a decorator & fluent API based ORM for Typescript, it's built on Sequelize.
 
+## Installation
+
+The project is currently under active development. It's not considered stable to release in NPM. However, if you want to have a try, edit your `package.json` like the following code:
+
+```
+"dependencies": {
+  "torm": "git+https://github.com/tormjs/torm.git#master"
+}
+```
+
 ## Document
 Documents are still under construction, it'll come out soon. So for now, please refer to **Examples** below for basic usage. 
 
