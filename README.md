@@ -5,9 +5,12 @@
 # Torm
 Torm is an decorator & fluent API based ORM for Typescript, it's built on Sequelize.
 
-## Usage
+## Document
+Documents are still under construction, it'll come out soon. So for now, please refer to **Examples** below for basic usage. 
 
-Connect to database
+## Examples
+
+### Connection
 
 ```typescript
 Torm.connect('orm', 'root', '', {
