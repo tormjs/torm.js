@@ -2,7 +2,10 @@
   "name": "torm",
   "version": "1.0.0",
   "description": "Torm is an easy-to-use ORM for Typescript, it based on Sequelize.",
-  "main": "index.js",
+  "main": "dist/src/index.js",
+  "files": [
+    "dist/src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ele828/torm.git"
