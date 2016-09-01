@@ -1,7 +1,9 @@
+<p align="center"><img width="100"src="https://raw.githubusercontent.com/tormjs/torm/master/docs/torm.png"></p>
+
+<p align="center">
 # Torm
 Torm is an easy-to-use ORM for Typescript, it's built on Sequelize.
-
-### Note: Still under development, don't use it in production.
+</p>
 
 ## Usage
 
@@ -58,3 +60,7 @@ console.log(count);
 let all = await Torm.query(Person.prototype).limit(2).offset(1).findAll();
 all.forEach(a => console.log(a.id));
 ```
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
