@@ -98,6 +98,7 @@ describe('Query testing', () => {
             .offset(2)
             .find();
         chai_1.assert.isArray(rst);
+        chai_1.assert.equal(rst.length, 3);
     }));
     it('should perform complex expression query syntax', () => __awaiter(this, void 0, void 0, function* () {
         let rst = yield src_1.Torm

@@ -6,8 +6,16 @@ class EmptyPropertyError extends Error {
         super(`Property of ${entity} is empty`);
     }
 }
+class NoDatabaseConnectError extends Error {
+    constructor(op) {
+        super(`Should connect to database before ${op} operation`);
+    }
+}
 class EntityCombinator {
     static compose(entityName) {
+        if (!Torm_1.Torm.driver) {
+            throw new NoDatabaseConnectError(`EntityCombinator.compose()`);
+        }
         let entity = entity_1.entityPool.poll(entityName);
         let properties = {};
         entity.metadata.forEach((prop) => {

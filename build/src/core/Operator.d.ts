@@ -2,6 +2,27 @@
 export declare class ArgumentsError extends Error {
     constructor(method: string);
 }
+export declare class OperatorType {
+    static readonly AND: string;
+    static readonly OR: string;
+    static readonly EQ: string;
+    static readonly NE: string;
+    static readonly LT: string;
+    static readonly LTE: string;
+    static readonly GT: string;
+    static readonly GTE: string;
+    static readonly NOT: string;
+    static readonly BEWTWEEN: string;
+    static readonly NOT_BEWTWEEN: string;
+    static readonly IN: string;
+    static readonly NOT_IN: string;
+    static readonly LIKE: string;
+    static readonly NOT_LIKE: string;
+}
+export declare class TransformType {
+    static readonly AND: string;
+    static readonly OR: string;
+}
 export interface IOperator {
     eq(arg: number | string | Date): Operator;
     ne(arg: number | string | Date): Operator;
