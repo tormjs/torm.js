@@ -60,7 +60,7 @@ let all = await Torm.query(Person.prototype).limit(2).offset(1).findAll();
 all.forEach(a => console.log(a.id));
 ```
 
-Fluent Query API
+### Fluent Query API
 
 ```typescript
 const cond = col('age').lt(20);    // age < 20
@@ -73,7 +73,7 @@ const cond = col('id').between(20, 30);
 
 ```
 
-We could integrate fluent API with query API.
+We could integrate query API with fluent API.
 
 ```typescript
 
