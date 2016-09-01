@@ -3,7 +3,7 @@
 <a href="https://circleci.com/gh/tormjs/torm/tree/master"><img src="https://img.shields.io/circleci/project/tormjs/torm/master.svg" alt="Build Status"></a>
 
 # Torm
-Torm is an easy-to-use ORM for Typescript, it's built on Sequelize.
+Torm is an decorator & fluent API based ORM for Typescript, it's built on Sequelize.
 
 ## Usage
 
