@@ -77,7 +77,7 @@ We could integrate query API with fluent API.
 
 ```typescript
 
-let rst = await Torm.query(Perons.prototype)
+let rst = await Torm.query(Person.prototype)
     .where( col('age').lt(30).and().gt(20) )
     .findAll();
 
