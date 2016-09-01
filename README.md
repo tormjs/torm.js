@@ -1,9 +1,7 @@
-<p align="center"><img width="100"src="https://raw.githubusercontent.com/tormjs/torm/master/docs/torm.png"></p>
+<img width="130"src="https://raw.githubusercontent.com/tormjs/torm/master/docs/torm.png">
 
-<p align="center">
 # Torm
 Torm is an easy-to-use ORM for Typescript, it's built on Sequelize.
-</p>
 
 ## Usage
 
