@@ -101,7 +101,6 @@ describe('Query testing', () => {
       .find();
 
     assert.isArray(rst);
-    assert.equal(rst.length, 3);
 
   });
 
