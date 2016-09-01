@@ -73,6 +73,16 @@ const cond = col('id').between(20, 30);
 
 ```
 
+We could integrate fluent API with query API.
+
+```typescript
+
+let rst = await Torm.query(Perons.prototype)
+    .where( col('age').lt(30).and().gt(20) )
+    .findAll();
+
+```
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
