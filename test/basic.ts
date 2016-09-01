@@ -10,6 +10,12 @@ import { col } from '../src';
 import { ModelDefinitionError } from './../src/core/Torm';
 import { entityPool } from '../src/entity';
 
+// CI configuration
+const database = {
+  usr: process.env.CI ? 'ubuntu' : 'root',
+  table: process.env.CI ? 'circle_test' : 'orm'
+};
+
 describe('Test basic usage', () => {
   let Person;
 
@@ -23,7 +29,7 @@ describe('Test basic usage', () => {
 
   it('connect to database successfully', () => {
 
-    let conn = Torm.connect('circle_test', 'ubuntu', '', {
+    let conn = Torm.connect(database.table, database.usr, '', {
       host: 'localhost',
       dialect: 'mysql'
     });

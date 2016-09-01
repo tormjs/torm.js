@@ -16,7 +16,6 @@ Torm.connect('orm', 'root', '', {
 });
 ```
 
-
 Model definition
 
 ```typescript

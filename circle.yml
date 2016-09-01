@@ -3,6 +3,8 @@ machine:
     version: 6.2.1
   services:
     - mysql
+  environment:
+    CI: true
 
 test:
   override:
