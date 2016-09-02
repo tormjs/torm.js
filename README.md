@@ -38,6 +38,7 @@ import 'reflect-metadata';
 It works! You can import torm and getting your work done!
 
 > Btw, if you want to use ```async/await``` in your code, you should tweak option ```target``` as below:
+
 ```
 "compilerOptions": {
   "target": "es2015",
