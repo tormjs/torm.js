@@ -37,6 +37,13 @@ import 'reflect-metadata';
 
 It works! You can import torm and getting your work done!
 
+> Btw, if you want to use ```async/await``` in your code, you should tweak option ```target``` as below:
+```
+"compilerOptions": {
+  "target": "es2015",
+}
+```
+
 ## Document
 Documents are still under construction, it'll come out soon. So for now, please refer to **Examples** below for basic usage. 
 
@@ -82,16 +89,16 @@ Torm.create(person);
 ### Query API
 
 ```typescript
-let persons = await Torm.query(Person.prototype)
+let persons = await Torm.query(Person)
     .where(col('id').eq(1))
     .findAll();
 
 persons.forEach(p => console.log(p.name))
 
-let count = await Torm.query(Person.prototype).count();
+let count = await Torm.query(Person).count();
 console.log(count);
 
-let all = await Torm.query(Person.prototype).limit(2).offset(1).findAll();
+let all = await Torm.query(Person).limit(2).offset(1).findAll();
 all.forEach(a => console.log(a.id));
 ```
 
@@ -112,7 +119,7 @@ We could integrate query API with fluent API.
 
 ```typescript
 
-let rst = await Torm.query(Person.prototype)
+let rst = await Torm.query(Person)
     .where( col('age').lt(30).and().gt(20) )
     .findAll();
 
