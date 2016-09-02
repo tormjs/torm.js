@@ -3,7 +3,7 @@
 <a href="https://circleci.com/gh/tormjs/torm/tree/master"><img src="https://img.shields.io/circleci/project/tormjs/torm/master.svg" alt="Build Status"></a>
 
 # Torm
-Torm is a decorator & fluent API based ORM for Typescript, it's built on Sequelize.
+Torm is a decorator-based ORM for Typescript with a set of fluent API, it's built on Sequelize.
 
 ## Installation
 
@@ -14,6 +14,28 @@ The project is currently under active development. It's not considered stable to
   "torm": "git+https://github.com/tormjs/torm.git#master"
 }
 ```
+
+And then, we should enable some config in ```tsconfig.json``` file.
+
+```
+"compilerOptions": {
+  // ..... other configuration
+  // add following two lines.
+  
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true
+}
+```
+
+Finally, import ```reflect-metadata``` module in the entrance of your app:
+
+```
+import 'reflect-metadata';
+
+// your code...
+```
+
+It works! You can import torm and getting your work done!
 
 ## Document
 Documents are still under construction, it'll come out soon. So for now, please refer to **Examples** below for basic usage. 
