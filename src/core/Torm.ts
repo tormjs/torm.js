@@ -49,8 +49,8 @@ export class Torm {
    * @param {any} args
    * @returns
    */
-  static sync<E extends Model>(object: E, ...args): Promise<E> {
-    let objectName = object.constructor.name.toLowerCase();
+  static sync<E extends Model>(object: {prototype: E}, ...args): Promise<E> {
+    let objectName = object.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(objectName);
     let rst;
     try {
@@ -82,8 +82,8 @@ export class Torm {
    * @static
    * @returns
    */
-  static query<E extends Model>(clazz: E): Query<E> {
-    return new Result().query(clazz);
+  static query<E extends Model>(clazz: {prototype: E}): Query<E> {
+    return new Result().query(clazz.prototype);
   }
 
   static update<E extends Model>(clazz: E): Update<E> {

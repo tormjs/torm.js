@@ -52,7 +52,7 @@ describe('Test basic usage', () => {
       friends: string;
     }
 
-    let model = await Torm.sync(Person.prototype);
+    let model = await Torm.sync(Person);
     assert.typeOf(model, 'object');
 
   });
@@ -60,7 +60,7 @@ describe('Test basic usage', () => {
   it('should throw an Error if Model is defined incorrectly', async (done) => {
     class Fake extends Model {}
     try {
-      await Torm.sync(Fake.prototype);
+      await Torm.sync(Fake);
     } catch (e) {
       if (e instanceof ModelDefinitionError) {
         done();
@@ -94,13 +94,13 @@ describe('Query testing', () => {
   });
 
   it('should perform basic count', async () => {
-    let count = await Torm.query(Person.prototype).count();
+    let count = await Torm.query(Person).count();
     assert.isNumber(count);
   });
 
   it('should perform complex query', async () => {
     let rst = await Torm
-      .query(Person.prototype)
+      .query(Person)
       .not('name')
       .limit(3)
       .offset(2)
@@ -112,7 +112,7 @@ describe('Query testing', () => {
 
   it('should perform complex expression query syntax', async () => {
     let rst = await Torm
-      .query(Person.prototype)
+      .query(Person)
       .where(col('age').lt(0).or().gt(20))
       .findAll();
 
