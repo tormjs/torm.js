@@ -121,14 +121,14 @@ export class Query<E extends Model> implements IQuery<E> {
    * @private
    * @type {E}
    */
-  private _clazz: E;
+  private _clazz: {prototype: E};
   private _attributes: Array<any>;
   private _whereConditions: Array<Object>;
   private _excludes: Array<any>;
   private _limit: number;
   private _offset: number;
 
-  constructor(clazz: E) {
+  constructor(clazz: {prototype: E}) {
     this._clazz = clazz;
     this._attributes = [];
     this._whereConditions = [];
