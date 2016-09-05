@@ -4,8 +4,8 @@
 
 import 'reflect-metadata';
 import { assert } from 'chai'; 
-import { col } from '../src';
-import { ArgumentsError } from './../src/core/Operator';
+import { col } from '../../src';
+import { ArgumentsError } from '../../src/core/Operator';
 
 describe('Operator based expression query syntax', () => {
 

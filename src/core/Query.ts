@@ -138,6 +138,8 @@ export class Query<E extends Model> implements IQuery<E> {
   /**
    * Count number in specify conditions
    * [sequelize.fn('COUNT', sequelize.col('hats')), 'no_hats']
+   * 
+   * TODO: what if modelName is not found???
    *
    * @param {string} [name]
    * @param {string} [alias]
@@ -145,7 +147,7 @@ export class Query<E extends Model> implements IQuery<E> {
    */
   public async count(name?: string, alias?: string): Promise<number> {
     let sequelize = SequelizeDriver.sequelize;
-    let modelName = this._clazz.constructor.name.toLowerCase();
+    let modelName = this._clazz.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
     let param = {attributes: []};
 
@@ -228,7 +230,7 @@ export class Query<E extends Model> implements IQuery<E> {
     if (this._attributes.length <= 0 && this._excludes.length <= 0)
       throw new WrongMethodInvokedError('find()', 'findAll()');
 
-    let modelName = this._clazz.constructor.name.toLowerCase();
+    let modelName = this._clazz.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
     return <any>model.findAll(this._buildComplexQuery());
   }
@@ -247,7 +249,7 @@ export class Query<E extends Model> implements IQuery<E> {
       throw new WrongMethodInvokedError('findAll()', 'find()');
 
     // get sequelize model from model pool
-    let modelName = this._clazz.constructor.name.toLowerCase();
+    let modelName = this._clazz.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
     return <Result<E>>model.findAll(this._buildQuery());
   }

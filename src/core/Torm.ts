@@ -83,7 +83,7 @@ export class Torm {
    * @returns
    */
   static query<E extends Model>(clazz: {prototype: E}): Query<E> {
-    return new Result().query(clazz.prototype);
+    return new Result().query(clazz);
   }
 
   static update<E extends Model>(clazz: E): Update<E> {

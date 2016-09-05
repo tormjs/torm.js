@@ -4,11 +4,11 @@
 
 import 'reflect-metadata';
 import { assert } from 'chai'; 
-import { Torm, Model, Result } from '../src';
-import { Column, Entity } from '../src';
-import { col } from '../src';
-import { ModelDefinitionError } from './../src/core/Torm';
-import { entityPool } from '../src/entity';
+import { Torm, Model, Result } from '../../src';
+import { Column, Entity } from '../../src';
+import { col } from '../../src';
+import { ModelDefinitionError } from '../../src/core/Torm';
+import { entityPool } from '../../src/entity';
 
 // CI configuration
 const database = {

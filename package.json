@@ -39,6 +39,6 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build": "npm run lint && npm run test && npm run clean-build && tsc",
     "before-debug": "npm run lint && tsc",
-    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.ts"
   }
 }
