@@ -11,7 +11,7 @@ import { Update } from './Update';
  * @template E
  */
 export class Result<E extends Model> extends Array<E> {
-  public query<E extends Model>(clazz: {prototype: E}): Query<E> {
+  public query<E extends Model>(clazz: { prototype: E }): Query<E> {
     return new Query(clazz);
   }
 
