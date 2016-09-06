@@ -18,15 +18,12 @@ const database = {
 };
 
 describe('Test basic usage', () => {
-  let Person;
-
-  before(() => {
-    Person = class Person extends Model {
+  // pre-define
+  class Person extends Model {
       name: string;
       age: number;
       friends: string;
-    };
-  });
+  }
 
   it('connect to database successfully', () => {
 
@@ -132,7 +129,7 @@ describe('Query testing', () => {
         return;
       }
       assert.fail();
-      
+
     });
 
     it('#find()', async () => {
