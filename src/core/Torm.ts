@@ -22,13 +22,16 @@ export class Torm {
   private static _driver: SequelizeDriver;
 
   /**
-   * Connect to database
+   * Connect to database, if connect multiple times,
+   * it'll return the first connection
    *
    * @static
    * @param {any} args
    */
   static connect(...args) {
-    return this._driver = SequelizeDriver.connect(...args);
+    return !this._driver
+      ? this._driver = SequelizeDriver.connect(...args)
+      : this._driver;
   }
 
   /**
@@ -49,7 +52,7 @@ export class Torm {
    * @param {any} args
    * @returns
    */
-  static sync<E extends Model>(object: {prototype: E}, ...args): Promise<E> {
+  static sync<E extends Model>(object: { prototype: E }, ...args): Promise<E> {
     let objectName = object.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(objectName);
     let rst;
@@ -82,7 +85,7 @@ export class Torm {
    * @static
    * @returns
    */
-  static query<E extends Model>(clazz: {prototype: E}): Query<E> {
+  static query<E extends Model>(clazz: { prototype: E }): Query<E> {
     return new Result().query(clazz);
   }
 
