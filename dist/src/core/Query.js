@@ -16,6 +16,12 @@ class ClassNotFoundError extends Error {
     }
 }
 exports.ClassNotFoundError = ClassNotFoundError;
+class ModelNotFoundError extends Error {
+    constructor(modelName) {
+        super(`Model '${modelName}' is not found, maybe it's not defined properly yet`);
+    }
+}
+exports.ModelNotFoundError = ModelNotFoundError;
 class WrongMethodInvokedError extends Error {
     constructor(method, instead) {
         super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
@@ -32,8 +38,9 @@ class Query {
     count(name, alias) {
         return __awaiter(this, void 0, void 0, function* () {
             let sequelize = SequelizeDriver_1.SequelizeDriver.sequelize;
-            let modelName = this._clazz.constructor.name.toLowerCase();
+            let modelName = this._clazz.prototype.constructor.name.toLowerCase();
             let model = SequelizeModelPool_1.sequelizeModelPool.poll(modelName);
+            this._checkModelExist(model, modelName);
             let param = { attributes: [] };
             if (!name || name.trim() === '') {
                 name = '*';
@@ -77,8 +84,9 @@ class Query {
             throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
         if (this._attributes.length <= 0 && this._excludes.length <= 0)
             throw new WrongMethodInvokedError('find()', 'findAll()');
-        let modelName = this._clazz.constructor.name.toLowerCase();
+        let modelName = this._clazz.prototype.constructor.name.toLowerCase();
         let model = SequelizeModelPool_1.sequelizeModelPool.poll(modelName);
+        this._checkModelExist(model, modelName);
         return model.findAll(this._buildComplexQuery());
     }
     findAll() {
@@ -86,8 +94,9 @@ class Query {
             throw new ClassNotFoundError('Lack of class property, please pass it in query clause');
         if (this._attributes.length > 0 || this._excludes.length > 0)
             throw new WrongMethodInvokedError('findAll()', 'find()');
-        let modelName = this._clazz.constructor.name.toLowerCase();
+        let modelName = this._clazz.prototype.constructor.name.toLowerCase();
         let model = SequelizeModelPool_1.sequelizeModelPool.poll(modelName);
+        this._checkModelExist(model, modelName);
         return model.findAll(this._buildQuery());
     }
     _buildQuery() {
@@ -140,6 +149,11 @@ class Query {
                 });
             });
             param['where'] = conditions;
+        }
+    }
+    _checkModelExist(model, name) {
+        if (!model) {
+            throw new ModelNotFoundError(name);
         }
     }
     limit(num) {

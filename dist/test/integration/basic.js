@@ -18,10 +18,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 require('reflect-metadata');
 const chai_1 = require('chai');
-const src_1 = require('../src');
-const src_2 = require('../src');
-const src_3 = require('../src');
-const Torm_1 = require('./../src/core/Torm');
+const src_1 = require('../../src');
+const src_2 = require('../../src');
+const src_3 = require('../../src');
+const Torm_1 = require('../../src/core/Torm');
+const database = {
+    usr: process.env.CI ? 'ubuntu' : 'root',
+    table: process.env.CI ? 'circle_test' : 'orm'
+};
 describe('Test basic usage', () => {
     let Person;
     before(() => {
@@ -30,7 +34,7 @@ describe('Test basic usage', () => {
         ;
     });
     it('connect to database successfully', () => {
-        let conn = src_1.Torm.connect('orm', 'root', '', {
+        let conn = src_1.Torm.connect(database.table, database.usr, '', {
             host: 'localhost',
             dialect: 'mysql'
         });
@@ -55,20 +59,20 @@ describe('Test basic usage', () => {
             src_2.Entity, 
             __metadata('design:paramtypes', [])
         ], Person);
-        let model = yield src_1.Torm.sync(Person.prototype);
+        let model = yield src_1.Torm.sync(Person);
         chai_1.assert.typeOf(model, 'object');
     }));
-    it('should throw an Error if Model is defined incorrectly', (done) => __awaiter(this, void 0, void 0, function* () {
+    it('should throw an Error if Model is defined incorrectly', () => __awaiter(this, void 0, void 0, function* () {
         class Fake extends src_1.Model {
         }
         try {
-            yield src_1.Torm.sync(Fake.prototype);
+            yield src_1.Torm.sync(Fake);
         }
-        catch (e) {
-            if (e instanceof Torm_1.ModelDefinitionError) {
-                done();
-            }
+        catch (ex) {
+            if (ex instanceof Torm_1.ModelDefinitionError)
+                return;
         }
+        chai_1.assert.fail();
     }));
     it('should create an entity correctly', () => __awaiter(this, void 0, void 0, function* () {
         let person = new Person();
@@ -87,25 +91,60 @@ describe('Query testing', () => {
         ;
     });
     it('should perform basic count', () => __awaiter(this, void 0, void 0, function* () {
-        let count = yield src_1.Torm.query(Person.prototype).count();
+        let count = yield src_1.Torm.query(Person).count();
         chai_1.assert.isNumber(count);
     }));
     it('should perform complex query', () => __awaiter(this, void 0, void 0, function* () {
         let rst = yield src_1.Torm
-            .query(Person.prototype)
+            .query(Person)
             .not('name')
             .limit(3)
             .offset(2)
             .find();
         chai_1.assert.isArray(rst);
-        chai_1.assert.equal(rst.length, 3);
     }));
     it('should perform complex expression query syntax', () => __awaiter(this, void 0, void 0, function* () {
         let rst = yield src_1.Torm
-            .query(Person.prototype)
+            .query(Person)
             .where(src_3.col('age').lt(0).or().gt(20))
             .findAll();
         chai_1.assert.isArray(rst);
     }));
+    describe('should throw Error is model is not found', () => {
+        class Fake extends src_1.Model {
+        }
+        it('#count()', () => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield src_1.Torm.query(Fake).count();
+            }
+            catch (ex) {
+                return;
+            }
+            chai_1.assert.fail();
+        }));
+        it('#find()', () => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield src_1.Torm.query(Fake)
+                    .column('age')
+                    .where(src_3.col('age').lte(20))
+                    .find();
+            }
+            catch (ex) {
+                return;
+            }
+            chai_1.assert.fail();
+        }));
+        it('#findAll()', () => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield src_1.Torm.query(Fake)
+                    .where(src_3.col('age').lte(20))
+                    .findAll();
+            }
+            catch (ex) {
+                return;
+            }
+            chai_1.assert.fail();
+        }));
+    });
 });
 //# sourceMappingURL=basic.js.map

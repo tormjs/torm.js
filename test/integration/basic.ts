@@ -9,6 +9,7 @@ import { Column, Entity } from '../../src';
 import { col } from '../../src';
 import { ModelDefinitionError } from '../../src/core/Torm';
 import { entityPool } from '../../src/entity';
+import { ModelNotFoundError } from './../../src/core/Query';
 
 // CI configuration
 const database = {
@@ -57,15 +58,16 @@ describe('Test basic usage', () => {
 
   });
 
-  it('should throw an Error if Model is defined incorrectly', async (done) => {
+  it('should throw an Error if Model is defined incorrectly', async () => {
     class Fake extends Model {}
+    
     try {
       await Torm.sync(Fake);
-    } catch (e) {
-      if (e instanceof ModelDefinitionError) {
-        done();
-      }
+    } catch (ex) {
+      if (ex instanceof ModelDefinitionError)
+        return;
     }
+    assert.fail();
   });
 
   it('should create an entity correctly', async () => {
@@ -116,8 +118,50 @@ describe('Query testing', () => {
       .where(col('age').lt(0).or().gt(20))
       .findAll();
 
-      assert.isArray(rst);
+    assert.isArray(rst);
       
+  });
+
+  describe('should throw Error is model is not found', () => {
+    class Fake extends Model {}
+
+    it('#count()', async () => {
+      try {
+        await Torm.query(Fake).count();
+      } catch (ex) {
+        return;
+      }
+      assert.fail();
+      
+    });
+
+    it('#find()', async () => {
+      try {
+        await Torm.query(Fake)
+          .column('age')
+          .where(col('age').lte(20))
+          .find();
+
+      } catch (ex) {
+        return;
+      }
+      assert.fail();
+
+    });
+
+    it('#findAll()', async () => {
+      try {
+        await Torm.query(Fake)
+          .where(col('age').lte(20))
+          .findAll();
+
+      } catch (ex) {
+        return;
+      }
+      assert.fail();
+
+    });
+
   });
 
 });

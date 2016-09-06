@@ -10,6 +10,12 @@ export class ClassNotFoundError extends Error {
   }
 }
 
+export class ModelNotFoundError extends Error {
+  constructor(modelName: string) {
+    super(`Model '${modelName}' is not found, maybe it's not defined properly yet`);
+  }
+}
+
 export class WrongMethodInvokedError extends Error {
   constructor(method: string, instead: string) {
     super(`The method '${method}' can not be invoked in this scenario, please use ${instead} method instead`);
@@ -22,88 +28,16 @@ export class WrongMethodInvokedError extends Error {
  * @interface QueryApi
  */
 export interface IQuery<E extends Model> {
-
-  /**
-   * Build all conditions, and executes findAll operation
-   *
-   * @returns {Result<E>}
-   */
   findAll(): Result<E>;
-
-  /**
-   * Build part conditions, execute and find them.
-   * If we invoke column(), not(),
-   * we can just use find() to execute
-   *
-   * @returns {*}
-   */
   find(): any;
-
-  /**
-   * Specify query columns.
-   * If invoked, findAll will just query this specified columns instead of query all.
-   *
-   * @param {string} name
-   * @param {string} [alias]
-   * @returns {Query<E>}
-   */
   column(name: string, alias?: string): Query<E>;
-
-  /**
-   * Exclude specified columns
-   *
-   * @returns {Query<E>}
-   */
   not(name: string): Query<E>;
-
-  /**
-   * Complex query
-   *
-   * @param {Object} conditions
-   * @returns {Query<E>}
-   */
   where(conditions: Object): Query<E>;
-
-  /**
-   * Count number in specify conditions
-   * [sequelize.fn('COUNT', sequelize.col('hats')), 'no_hats']
-   *
-   * @param {string} column
-   * @param {string} [alias]
-   * @returns {Query<E>}
-   */
   count(name: string, alias?: string): Promise<number>;
-
-  /**
-   * Limit record number of each query
-   *
-   * @param {number} num
-   * @returns {Query<E>}
-   */
   limit(num: number): Query<E>;
-
-  /**
-   * Skip record number
-   *
-   * @param {number} num
-   * @returns {Query<E>}
-   */
   offset(num: number): Query<E>;
-
-  /**
-   * Order implementation
-   *
-   * @returns {Query<E>}
-   */
   order(): Query<E>;
-
-  /**
-   * Raw SQL query
-   *
-   * @returns {Result<E>}
-   */
   raw(): Result<E>;
-
 }
 
 /**
@@ -149,6 +83,8 @@ export class Query<E extends Model> implements IQuery<E> {
     let sequelize = SequelizeDriver.sequelize;
     let modelName = this._clazz.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
+
+    this._checkModelExist(model, modelName);
     let param = {attributes: []};
 
     // count *
@@ -232,6 +168,8 @@ export class Query<E extends Model> implements IQuery<E> {
 
     let modelName = this._clazz.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
+    this._checkModelExist(model, modelName);
+
     return <any>model.findAll(this._buildComplexQuery());
   }
 
@@ -251,6 +189,8 @@ export class Query<E extends Model> implements IQuery<E> {
     // get sequelize model from model pool
     let modelName = this._clazz.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(modelName);
+    this._checkModelExist(model, modelName);
+
     return <Result<E>>model.findAll(this._buildQuery());
   }
 
@@ -338,6 +278,19 @@ export class Query<E extends Model> implements IQuery<E> {
         });
       });
       param['where'] = conditions;
+    }
+  }
+
+  /**
+   * Assure model can be found in model pool
+   * 
+   * @private
+   * @param {any} model
+   * @param {any} name
+   */
+  private _checkModelExist(model, name) {
+    if (!model) {
+      throw new ModelNotFoundError(name);
     }
   }
 

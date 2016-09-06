@@ -9,15 +9,15 @@ import { ArgumentsError } from '../../src/core/Operator';
 
 describe('Operator based expression query syntax', () => {
 
-  it('col() should returns an new object', () => {
+  it('#col() should returns an new object', () => {
     let ret = col('test');
     assert.isNotNull(ret);
     let ret2 = col('test');
     assert.notEqual(ret, ret2);
   });
 
-  describe('eq() function', () => {
-    it('should perform eq()', () => {
+  describe('#eq() function', () => {
+    it('should perform #eq()', () => {
       let rnd = random();
       assert.deepEqual(
         col('test').eq(rnd).expr,
@@ -25,14 +25,14 @@ describe('Operator based expression query syntax', () => {
       );
     });
 
-    it('eq() should support string', () => {
+    it('#eq() should support string', () => {
       assert.deepEqual(
         col('test').eq('test').expr,
         {test: {$eq: 'test'}}
       );
     });
 
-    it('eq() should support Date', () => {
+    it('#eq() should support Date', () => {
       let now = new Date();
       assert.deepEqual(
         col('test').eq(now).expr,
@@ -41,8 +41,8 @@ describe('Operator based expression query syntax', () => {
     });
   });
 
-  describe('ne() function', () => {
-    it('should perform ne()', () => {
+  describe('#ne() function', () => {
+    it('should perform #ne()', () => {
       let rnd = random();
       assert.deepEqual(
         col('test').ne(rnd).expr,
@@ -50,14 +50,14 @@ describe('Operator based expression query syntax', () => {
       );
     });
 
-    it('ne() should support string', () => {
+    it('#ne() should support string', () => {
       assert.deepEqual(
         col('test').ne('test').expr,
         {test: {$ne: 'test'}}
       );
     });
 
-    it('ne() should support Date', () => {
+    it('#ne() should support Date', () => {
       let now = new Date();
       assert.deepEqual(
         col('test').ne(now).expr,
@@ -66,8 +66,8 @@ describe('Operator based expression query syntax', () => {
     });
   });
 
-  describe('lt() function', () => {
-    it('should perform lt()', () => {
+  describe('#lt() function', () => {
+    it('should perform #lt()', () => {
       let rnd = random();
       assert.deepEqual(
         col('test').lt(rnd).expr,
@@ -75,7 +75,7 @@ describe('Operator based expression query syntax', () => {
       );
     });
 
-    it('lt() should support Date type', () => {
+    it('#lt() should support Date type', () => {
       let now = new Date;
       assert.deepEqual(
         col('date').lt(now).expr,
@@ -84,8 +84,8 @@ describe('Operator based expression query syntax', () => {
     });
   });
 
-  describe('lte() function', () => {
-    it('should perform lte()', () => {
+  describe('#lte() function', () => {
+    it('should perform #lte()', () => {
       let rnd = random();
       assert.deepEqual(
         col('test').lte(rnd).expr,
@@ -93,7 +93,7 @@ describe('Operator based expression query syntax', () => {
       );
     });
 
-    it('lte() should support Date', () => {
+    it('#lte() should support Date', () => {
       let now = new Date();
       assert.deepEqual(
         col('test').lte(now).expr,
@@ -102,8 +102,8 @@ describe('Operator based expression query syntax', () => {
     });
   });
 
-  describe('gt() function', () => {
-    it('should perform gt()', () => {
+  describe('#gt() function', () => {
+    it('should perform #gt()', () => {
       let rnd = random();
       assert.deepEqual(
         col('test').gt(rnd).expr,
@@ -111,7 +111,7 @@ describe('Operator based expression query syntax', () => {
       );
     });
 
-    it('gt() should support Date type', () => {
+    it('#gt() should support Date type', () => {
       let now = new Date();
       assert.deepEqual(
         col('test').gt(now).expr,
@@ -120,8 +120,8 @@ describe('Operator based expression query syntax', () => {
     });
   });
 
-  describe('gte() function', () => {
-    it('should perform gte()', () => {
+  describe('#gte() function', () => {
+    it('should perform #gte()', () => {
       let rnd = random();
       assert.deepEqual(
         col('test').gte(rnd).expr,
@@ -129,7 +129,7 @@ describe('Operator based expression query syntax', () => {
       );
     });
 
-    it('gte() should support Date type', () => {
+    it('#gte() should support Date type', () => {
       let now = new Date();
       assert.deepEqual(
         col('test').gte(now).expr,
@@ -138,7 +138,7 @@ describe('Operator based expression query syntax', () => {
     });
   });
 
-  it('should perform not()', () => {
+  it('should perform #not()', () => {
     assert.deepEqual(
       col('test').not(true).expr,
       {test: {$not: true}}
@@ -150,7 +150,7 @@ describe('Operator based expression query syntax', () => {
     );
   });
 
-  describe('between() function', () => {
+  describe('#between() function', () => {
     
     it('should support number and Date array type', () => {
       let nums = Array(2).fill(0).map(_ => random());
@@ -183,7 +183,7 @@ describe('Operator based expression query syntax', () => {
 
   });
 
-  describe('notBetween() function', () => {
+  describe('#notBetween() function', () => {
 
     it('should support number and Date array type', () => {
       let nums = Array(2).fill(0).map(_ => random());
@@ -216,7 +216,7 @@ describe('Operator based expression query syntax', () => {
 
   });
 
-  describe('in() function', () => {
+  describe('#in() function', () => {
 
     it('should support a bunch of numbers as parameters', () => {
       assert.deepEqual(
@@ -231,7 +231,7 @@ describe('Operator based expression query syntax', () => {
 
   });
 
-  it('and() transformation', () => {
+  it('#and() transformation', () => {
 
   });
 
@@ -252,19 +252,19 @@ describe('Operator based expression query syntax', () => {
     }
   });
 
-  it('or() and and() combinition', () => {
+  it('#or() and #and() combinition', () => {
     let rst = col('test').lt(20).or().gt(30).and().between(0, 100);
     let exp = { test: { '$and': { '$or': {$lt: 20, $gt: 30}, '$between': [0, 100]} } };
     assert.deepEqual(rst.expr, exp);
   });
 
-  it('or() and or() combinition', () => {
+  it('#or() and #or() combinition', () => {
     let rst = col('test').lt(20).or().gt(30).or().eq(30);
     let exp = { test: { '$or': { '$or': {$lt: 20, $gt: 30}, '$eq': 30 } } };
     assert.deepEqual(rst.expr, exp);
   });
 
-  it('and() and or() combinition', () => {
+  it('#and() and #or() combinition', () => {
     let rst = col('test').lt(20).and().gt(30).or().between(100, 101);
     let exp = { test: { '$or': { '$and': {$lt: 20, $gt: 30}, '$between': [100, 101] } } };
     assert.deepEqual(rst.expr, exp);

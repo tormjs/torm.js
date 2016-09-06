@@ -52,17 +52,15 @@ export class Torm {
    * @param {any} args
    * @returns
    */
-  static sync<E extends Model>(object: { prototype: E }, ...args): Promise<E> {
+  static async sync<E extends Model>(object: { prototype: E }, ...args): Promise<E> {
     let objectName = object.prototype.constructor.name.toLowerCase();
     let model: any = sequelizeModelPool.poll(objectName);
-    let rst;
-    try {
-      rst = model.sync(...args);
-    } catch (ex) {
-      if (ex instanceof TypeError) {
-        throw new ModelDefinitionError(objectName);
-      }
+
+    if (!model) {
+      throw new ModelDefinitionError(objectName);
     }
+
+    let rst = await model.sync(...args);
     return rst;
   }
 

@@ -38,7 +38,7 @@
     "clean-build": "rm -rf dist/",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build": "npm run lint && npm run test && npm run clean-build && tsc",
-    "before-debug": "npm run lint && tsc",
+    "before-debug": "npm run clean-build && tsc",
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.ts"
   }
 }

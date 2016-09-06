@@ -9,12 +9,12 @@
       "args": [
         "test/",
         "--timeout", "9999999",
-        "${workspaceRoot}/build/test/*.js"
+        "${workspaceRoot}/dist/test/**/*.js"
       ],
       "preLaunchTask": "build",
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
-      "outDir": "${workspaceRoot}/build",
+      "outDir": "${workspaceRoot}/dist",
       "env": {
         "NODE_ENV": "development"
       }

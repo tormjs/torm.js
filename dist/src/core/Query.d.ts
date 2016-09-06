@@ -4,6 +4,9 @@ import { Result } from './Result';
 export declare class ClassNotFoundError extends Error {
     constructor(msg: string);
 }
+export declare class ModelNotFoundError extends Error {
+    constructor(modelName: string);
+}
 export declare class WrongMethodInvokedError extends Error {
     constructor(method: string, instead: string);
 }
@@ -26,7 +29,9 @@ export declare class Query<E extends Model> implements IQuery<E> {
     private _excludes;
     private _limit;
     private _offset;
-    constructor(clazz: E);
+    constructor(clazz: {
+        prototype: E;
+    });
     count(name?: string, alias?: string): Promise<number>;
     where(conditions: Object): Query<E>;
     not(name: string): Query<E>;
@@ -36,6 +41,7 @@ export declare class Query<E extends Model> implements IQuery<E> {
     private _buildQuery();
     private _buildComplexQuery();
     private _buildWhere(param);
+    private _checkModelExist(model, name);
     limit(num: number): Query<E>;
     offset(num: number): Query<E>;
     order(): Query<E>;
