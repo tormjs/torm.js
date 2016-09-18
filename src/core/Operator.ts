@@ -233,7 +233,7 @@ export class Operator implements IOperator {
 
   public notIn(...a: Array<number | number[]>): Operator {
     this._checkArguments(OperatorType.NOT_IN, a);
-    let notInExpr;
+    let notInExpr = {};
 
     // pass in array as argument
     // should be only one array
@@ -241,11 +241,11 @@ export class Operator implements IOperator {
       if (a.length !== 1)
         throw new ArgumentsError(OperatorType.NOT_IN);
       else {
-        notInExpr = {[OperatorType.NOT_IN]: a[0]};
+        notInExpr[this._exprName] = {[OperatorType.NOT_IN]: a[0]};
       }
     }
     else
-      notInExpr = {[OperatorType.NOT_IN]: a};
+      notInExpr[this._exprName] = {[OperatorType.NOT_IN]: a};
 
     this._operations.push(notInExpr);
     this.expr = notInExpr;

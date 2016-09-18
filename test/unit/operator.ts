@@ -226,9 +226,37 @@ describe('Operator based expression query syntax', () => {
     });
     
     it('should support an Array and arrays length should be 1 otherwise an Error will be throwed', () => {
+      assert.deepEqual(
+        col('test').in([1, 2, 3, 4, 5]).expr,
+        {test: {$in: [1, 2, 3, 4, 5]}}
+      );
+
+      assert.throws(_ => { 
+        col('test').in([1], [2]);
+      });
       
     });
 
+  });
+
+  describe('#notIn() function', () => {
+    it('should support a bunch of numbers as parameters', () => {
+      assert.deepEqual(
+        col('test').in(2, 3, 4, 5, 6).expr,
+        {test: {$in: [2, 3, 4, 5, 6]}}
+      );
+    });
+    
+    it('should support an Array and arrays length should be 1 otherwise an Error will be throwed', () => {
+      assert.deepEqual(
+        col('test').in([1, 2, 3, 4, 5]).expr,
+        {test: {$in: [1, 2, 3, 4, 5]}}
+      );
+
+      assert.throws(_ => { 
+        col('test').in([1], [2]);
+      });
+    });
   });
 
   it('#and() transformation', () => {
