@@ -2,7 +2,6 @@ import { Torm } from './Torm';
 import { entityPool, Entity, Property } from '../entity';
 import { SequelizeDriver } from '../core';
 
-
 class EmptyPropertyError extends Error {
   constructor(entity: string) {
     super(`Property of ${entity} is empty`);
