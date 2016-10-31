@@ -27,12 +27,8 @@ const database = {
     table: process.env.CI ? 'circle_test' : 'orm'
 };
 describe('Test basic usage', () => {
-    let Person;
-    before(() => {
-        Person = class Person extends src_1.Model {
-        }
-        ;
-    });
+    class Person extends src_1.Model {
+    }
     it('connect to database successfully', () => {
         let conn = src_1.Torm.connect(database.table, database.usr, '', {
             host: 'localhost',

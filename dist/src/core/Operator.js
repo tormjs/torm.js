@@ -141,16 +141,16 @@ class Operator {
     }
     notIn(...a) {
         this._checkArguments(OperatorType.NOT_IN, a);
-        let notInExpr;
+        let notInExpr = {};
         if (Array.isArray(a[0])) {
             if (a.length !== 1)
                 throw new ArgumentsError(OperatorType.NOT_IN);
             else {
-                notInExpr = { [OperatorType.NOT_IN]: a[0] };
+                notInExpr[this._exprName] = { [OperatorType.NOT_IN]: a[0] };
             }
         }
         else
-            notInExpr = { [OperatorType.NOT_IN]: a };
+            notInExpr[this._exprName] = { [OperatorType.NOT_IN]: a };
         this._operations.push(notInExpr);
         this.expr = notInExpr;
         return this._checkEvaluation();
