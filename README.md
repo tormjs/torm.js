@@ -7,12 +7,10 @@ Torm is a decorator-based ORM for Typescript with a set of fluent API, it's buil
 
 ## Installation
 
-The project is currently under active development. It's not considered stable to release in NPM. However, if you want to have a try, edit your `package.json` like the following code:
+The project is currently under active development. But you can try to install it through NPM:
 
 ```
-"dependencies": {
-  "torm": "git+https://github.com/tormjs/torm.git#master"
-}
+npm i -S torm.js
 ```
 
 And then, we should enable some config in ```tsconfig.json``` file.

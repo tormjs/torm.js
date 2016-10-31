@@ -1,21 +1,17 @@
 {
-  "name": "torm",
-  "version": "1.0.0",
-  "description": "Torm is an easy-to-use ORM for Typescript, it based on Sequelize.",
-  "main": "dist/src/index.js",
-  "files": [
-    "dist/src"
-  ],
+  "name": "torm.js",
+  "version": "0.0.2",
+  "description": "Torm.js is an easy-to-use ORM for Typescript, it based on Sequelize.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ele828/torm.git"
+    "url": "git+https://github.com/torm.js/torm.js.git"
   },
   "author": "Eric Wong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ele828/torm/issues"
+    "url": "https://github.com/torm.js/torm.js/issues"
   },
-  "homepage": "https://github.com/ele828/torm#readme",
+  "homepage": "https://github.com/torm.js/torm.js#readme",
   "dependencies": {
     "@types/node": "^6.0.37",
     "mysql": "^2.11.1",
@@ -39,6 +35,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "build": "npm run lint && npm run test && npm run clean-build && tsc",
     "before-debug": "npm run clean-build && tsc",
-    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.ts"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.ts",
+    "publish": "npm run build && cp ./package.json ./README.MD ./dist/src && cd ./dist/src && npm publish ."
   }
 }
