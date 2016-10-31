@@ -1,4 +1,4 @@
 node_modules/
 dist/
-.vscode/settins.json
-.vscode/symbols.json
+./.vscode/settins.json
+./.vscode/symbols.json
