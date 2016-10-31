@@ -223,10 +223,11 @@ export class Query<E extends Model> implements IQuery<E> {
    */
   private _buildComplexQuery(): Object {
     let params;
-    params = {attributes: []};
+    params = { };
 
     // build attributes
     if (this._attributes.length > 0) {
+      params.attributes = [];
       this._attributes.forEach(attr => {
         params.attributes.push(attr);
       });
@@ -244,7 +245,7 @@ export class Query<E extends Model> implements IQuery<E> {
 
     if (this._limit || this._offset) {
       if (this._attributes.length === 0)
-      // avoid query bug of sequelize
+        // avoid query bug of sequelize
         if (Array.isArray(params.attributes))
           delete params.attributes;
     }
