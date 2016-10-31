@@ -1,6 +1,6 @@
-<img width="130"src="https://raw.githubusercontent.com/tormjs/torm/master/docs/torm.png">
+<img width="130"src="https://raw.githubusercontent.com/tormjs/torm.js/master/docs/torm.png">
 
-<a href="https://circleci.com/gh/tormjs/torm/tree/master"><img src="https://img.shields.io/circleci/project/tormjs/torm/master.svg" alt="Build Status"></a>
+<a href="https://circleci.com/gh/tormjs/torm.js/tree/master"><img src="https://img.shields.io/circleci/project/tormjs/torm.js/master.svg" alt="Build Status"></a>
 
 # Torm
 Torm is a decorator-based ORM for Typescript with a set of fluent API, it's built on Sequelize.
