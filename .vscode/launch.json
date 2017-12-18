@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Mocha Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "test/",
+        "--timeout", "9999999",
+        "${workspaceRoot}/dist/test/**/*.js"
+      ],
+      "preLaunchTask": "build",
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}",
+      "outDir": "${workspaceRoot}/dist",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  ]
+}

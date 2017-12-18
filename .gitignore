@@ -1,0 +1,4 @@
+node_modules/
+dist/
+./.vscode/settins.json
+./.vscode/symbols.json

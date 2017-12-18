@@ -1,0 +1,13 @@
+machine:
+  node:
+    version: 6.2.1
+  services:
+    - mysql
+  environment:
+    CI: true
+
+test:
+  override:
+    - npm run test
+  # post:
+  #   - bash <(curl -s https://codecov.io/bash)

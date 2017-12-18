@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declaration": true,
+        // "noFallthroughCasesInSwitch": true,
+        // "noImplicitReturns": true,
+        // "stripInternal": true,
+        // "pretty": true,
+        // "strictNullChecks": true,
+        "removeComments": true,
+        "rootDir": "./",
+        "outDir": "dist/"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
